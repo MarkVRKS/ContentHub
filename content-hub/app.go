@@ -32,6 +32,28 @@ type Service struct {
     URL         string `json:"url"`
 }
 
+type Vault struct {
+	ID       string `json:"id"`
+	SERVICE  string `json:"service"`
+	LOGIN    string `json:"login"`
+	PASSWORD string `json:"password"`
+}
+
+func (a *App) GetVault() []Vault {
+    filepath := "vault.json"
+    content, err := os.ReadFile(filepath)
+    if err !=nil {
+        return nil
+    }
+
+    var vaults []Vault
+    err = json.Unmarshal(content, &vaults)
+    if err !=nil {
+        return nil
+    }
+    return vaults
+}
+
 // получаем локальный IP компьютера
 func (a *App) GetLocalIP() string {
     addrs, err := net.InterfaceAddrs()
