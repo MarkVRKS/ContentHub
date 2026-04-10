@@ -1,0 +1,51 @@
+name: Build Backend EXE
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller fastapi uvicorn sqlmodel websockets python-dotenv openai
+        cd backend/app
+        if (Test-Path requirements.txt) { pip install -r requirements.txt }
+
+    - name: Create run_server.py
+      shell: pwsh
+      run: |
+        cd backend/app
+        $content = @"
+        import uvicorn
+        from main import app
+        import multiprocessing
+
+        if __name__ == '__main__':
+            multiprocessing.freeze_support()
+            uvicorn.run(app, host='0.0.0.0', port=8000, reload=False)
+        "@
+        $content | Out-File -FilePath "run_server.py" -Encoding utf8
+
+    - name: Build with PyInstaller
+      shell: pwsh
+      run: |
+        cd backend/app
+        pyinstaller --name "PromptAGG_Server" --noconsole --onefile --hidden-import uvicorn.protocols.http.httptools_impl --hidden-import uvicorn.protocols.http.h11_impl --hidden-import uvicorn.protocols.websockets.websockets_impl --hidden-import uvicorn.loops.auto --hidden-import uvicorn.loops.asyncio --hidden-import uvicorn.logging run_server.py
+
+    - name: Upload EXE
+      uses: actions/upload-artifact@v4
+      with:
+        name: PromptAGG-Backend-Windows
+        path: backend/app/dist/PromptAGG_Server.exe

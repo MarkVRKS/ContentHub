@@ -1,0 +1,1560 @@
+This file is a merged representation of a subset of the codebase, containing specifically included files, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of a subset of the repository's contents that is considered the most important context.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Only files matching these patterns are included: frontend
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+frontend/.gitignore
+frontend/eslint.config.js
+frontend/index.html
+frontend/package.json
+frontend/postcss.config.js
+frontend/public/vite.svg
+frontend/README.md
+frontend/src/api.js
+frontend/src/App.css
+frontend/src/App.jsx
+frontend/src/assets/react.svg
+frontend/src/Board.jsx
+frontend/src/index.css
+frontend/src/main.jsx
+frontend/src/PromptModal.jsx
+frontend/src/SettingsModal.jsx
+frontend/src/Tools.jsx
+frontend/tailwind.config.js
+frontend/vite.config.js
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="frontend/.gitignore">
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+</file>
+
+<file path="frontend/eslint.config.js">
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{js,jsx}'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
+])
+</file>
+
+<file path="frontend/index.html">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frontend</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+</file>
+
+<file path="frontend/public/vite.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="31.88" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 257"><defs><linearGradient id="IconifyId1813088fe1fbc01fb466" x1="-.828%" x2="57.636%" y1="7.652%" y2="78.411%"><stop offset="0%" stop-color="#41D1FF"></stop><stop offset="100%" stop-color="#BD34FE"></stop></linearGradient><linearGradient id="IconifyId1813088fe1fbc01fb467" x1="43.376%" x2="50.316%" y1="2.242%" y2="89.03%"><stop offset="0%" stop-color="#FFEA83"></stop><stop offset="8.333%" stop-color="#FFDD35"></stop><stop offset="100%" stop-color="#FFA800"></stop></linearGradient></defs><path fill="url(#IconifyId1813088fe1fbc01fb466)" d="M255.153 37.938L134.897 252.976c-2.483 4.44-8.862 4.466-11.382.048L.875 37.958c-2.746-4.814 1.371-10.646 6.827-9.67l120.385 21.517a6.537 6.537 0 0 0 2.322-.004l117.867-21.483c5.438-.991 9.574 4.796 6.877 9.62Z"></path><path fill="url(#IconifyId1813088fe1fbc01fb467)" d="M185.432.063L96.44 17.501a3.268 3.268 0 0 0-2.634 3.014l-5.474 92.456a3.268 3.268 0 0 0 3.997 3.378l24.777-5.718c2.318-.535 4.413 1.507 3.936 3.838l-7.361 36.047c-.495 2.426 1.782 4.5 4.151 3.78l15.304-4.649c2.372-.72 4.652 1.36 4.15 3.788l-11.698 56.621c-.732 3.542 3.979 5.473 5.943 2.437l1.313-2.028l72.516-144.72c1.215-2.423-.88-5.186-3.54-4.672l-25.505 4.922c-2.396.462-4.435-1.77-3.759-4.114l16.646-57.705c.677-2.35-1.37-4.583-3.769-4.113Z"></path></svg>
+</file>
+
+<file path="frontend/README.md">
+# React + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+</file>
+
+<file path="frontend/src/api.js">
+import axios from 'axios';
+
+// локальный бэк fastapi
+const api = axios.create({
+    baseURL: 'http://127.0.0.1:8000',
+});
+
+// --------------
+// api для постов
+// --------------
+
+export const getPosts = (projectId = 'mns') =>
+    api.get('/content-plan/', { params: { project_id: projectId } });
+
+export const createPost = (postData) =>
+    api.post('/content-plan/', postData);
+
+export const updatePost = (postId, postData) =>
+    api.put(`/content-plan/${postId}`, postData);
+
+export const deletePost = (postId) =>
+    api.delete(`/content-plan/${postId}`);
+
+// -------------------
+// api для багажа идей
+// -------------------
+
+export const getIdeas = (projectId = 'mns') =>
+    api.get('/content-plan/ideas/', { params: { project_id: projectId } });
+
+export const createIdea = (ideaData) =>
+    api.post('/content-plan/ideas/', ideaData);
+
+export const deleteIdea = (ideaId) =>
+    api.delete(`/content-plan/ideas/${ideaId}`);
+
+// ---------------------------
+// api для библиотеки промптов
+// ---------------------------
+
+export const getLibrary = () =>
+    api.get('/content-plan/library/');
+
+export const createLibraryPrompt = (promptData) =>
+    api.post('/content-plan/library/', promptData);
+
+export const deleteLibraryPrompt = (promptId) =>
+    api.delete(`/content-plan/library/${promptId}`);
+
+export default {
+    getPosts, createPost, updatePost, deletePost,
+    getIdeas, createIdea, deleteIdea,
+    getLibrary, createLibraryPrompt, deleteLibraryPrompt
+};
+</file>
+
+<file path="frontend/src/assets/react.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+</file>
+
+<file path="frontend/src/main.jsx">
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+</file>
+
+<file path="frontend/src/SettingsModal.jsx">
+import React from 'react';
+import { X, Sun, Moon, Palette, Check, Settings2, Github, ExternalLink } from 'lucide-react';
+
+export default function SettingsModal({ isOpen, onClose, currentTheme, setTheme, projectId }) {
+  const themes = [
+    { 
+      id: 'light', 
+      label: 'Светлая классика', 
+      icon: Sun, 
+      color: 'bg-white', 
+      activeClass: 'border-purple-500 bg-purple-50 text-slate-900 shadow-sm' 
+    },
+    { 
+      id: 'dark', 
+      label: 'Глубокая полночь', 
+      icon: Moon, 
+      color: 'bg-slate-800', 
+      activeClass: 'border-purple-400 bg-slate-800 text-white shadow-md' 
+    },
+    { 
+      id: 'pixel', 
+      label: 'Pixel Space', 
+      icon: Palette, 
+      color: 'bg-purple-950', 
+      activeClass: 'border-cyan-400 bg-purple-950/50 text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.3)]' 
+    },
+  ];
+
+  return (
+    <>
+      {/* Затемнение фона (упрощенное для скорости) */}
+      <div 
+        className={`fixed inset-0 bg-slate-900/40 z-40 transition-opacity duration-300 ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={onClose}
+      />
+
+      {/* Оптимизированная панель */}
+      <div className={`fixed right-0 top-[73px] h-[calc(100vh-73px)] w-[380px] bg-[var(--bg-card)] border-l border-[var(--border-main)] z-50 transform-gpu transition-transform duration-300 ease-out will-change-transform ${
+        isOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}>
+        <div className="p-7 border-b border-[var(--border-main)] flex justify-between items-center bg-slate-50/30">
+          <h2 className="text-xl font-black text-[var(--text-main)] flex items-center gap-3">
+            <Settings2 className="text-purple-500 w-5 h-5" /> Параметры
+          </h2>
+          <button onClick={onClose} className="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-400">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-7 space-y-8 flex flex-col h-[calc(100%-80px)]">
+          {/* Секция тем */}
+          <div className="space-y-4">
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Интерфейс</label>
+            <div className="grid grid-cols-1 gap-2">
+              {themes.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setTheme(t.id)}
+                  className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all duration-150 ${
+                    currentTheme === t.id 
+                      ? t.activeClass 
+                      : 'border-transparent bg-slate-100/50 dark:bg-slate-800/30 text-[var(--text-main)] hover:border-slate-300'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl ${t.color} flex items-center justify-center border border-black/5`}>
+                      <t.icon className={`w-5 h-5 ${t.id === 'pixel' ? 'text-cyan-400' : 'text-slate-500'}`} />
+                    </div>
+                    <span className="font-bold text-sm">{t.label}</span>
+                  </div>
+                  {currentTheme === t.id && (
+                    <Check className={`w-5 h-5 ${t.id === 'pixel' ? 'text-cyan-400' : 'text-purple-600'}`} />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Секция GitHub (Твое золото) */}
+          <div className="mt-auto space-y-4">
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Разработка</label>
+            <a 
+              href="https://github.com/MarkVRKS/PromptAGG" 
+              target="_blank" 
+              rel="noreferrer"
+              className="group flex items-center justify-between p-5 bg-slate-900 dark:bg-purple-950/40 rounded-[24px] border border-slate-800 hover:border-purple-500 transition-all active:scale-95"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                  <Github className="w-7 h-7 text-slate-900" />
+                </div>
+                <div className="text-left">
+                  <p className="text-white font-black text-sm leading-tight">PromptAGG Source</p>
+                  <p className="text-slate-400 text-[10px] font-bold uppercase tracking-tighter">github.com/MarkVRKS</p>
+                </div>
+              </div>
+              <ExternalLink className="w-5 h-5 text-slate-500 group-hover:text-purple-400 transition-colors" />
+            </a>
+            
+            <div className="pt-4 text-center">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">
+                Build 2026.03 — {projectId?.toUpperCase()}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+</file>
+
+<file path="frontend/src/Tools.jsx">
+import React from 'react';
+import { 
+  ExternalLink, HardDrive, BrainCircuit, 
+  Cpu, Sparkles, Plus, Globe 
+} from 'lucide-react';
+
+const aiTools = [
+  { name: "Gemini", url: "https://gemini.google.com/", icon: <Sparkles className="w-8 h-8 text-blue-500" />, desc: "Google AI" },
+  { name: "GPTTonnel", url: "https://gpttonnel.ru/", icon: <Cpu className="w-8 h-8 text-purple-600" />, desc: "Доступ к моделям" },
+  { name: "ChatGPT", url: "https://chatgpt.com/", icon: <BrainCircuit className="w-8 h-8 text-emerald-600" />, desc: "OpenAI" },
+  { name: "DeepSeek", url: "https://www.deepseek.com/", icon: <Globe className="w-8 h-8 text-blue-400" />, desc: "Coding & Reasoning" },
+  { name: "QwenChat", url: "https://chat.qwenlm.ai/", icon: <Cpu className="w-8 h-8 text-orange-500" />, desc: "Alibaba AI" },
+  // ГУГЛ ДИСК (Меняй ссылку ниже)
+  { name: "Google Drive", url: "https://docs.google.com/spreadsheets/d/1uYPdNnZgAcsBhjnLaxkTKE-Npg4GYR3ArOGF4Z9Pv-8/edit?pli=1&gid=1843704431#gid=1843704431", icon: <HardDrive className="w-8 h-8 text-amber-500" />, desc: "Хранилище контента" },
+];
+
+const placeholders = [
+  { name: "Новый сервис", url: "#", desc: "Место для ссылки" },
+  { name: "Будущий тул", url: "#", desc: "Место для ссылки" },
+  { name: "Архив", url: "#", desc: "Место для ссылки" },
+];
+
+export default function Tools() {
+  const openLink = (url) => {
+    if (url !== "#") window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  return (
+    <div className="p-8 max-w-7xl mx-auto animate-in fade-in duration-500">
+      <h2 className="text-4xl font-black text-slate-900 mb-10 tracking-tighter uppercase">Нейронки & Инструменты</h2>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* АКТИВНЫЕ ИНСТРУМЕНТЫ */}
+        {aiTools.map((tool) => (
+          <div 
+            key={tool.name}
+            onClick={() => openLink(tool.url)}
+            className="group bg-white border-2 border-slate-100 p-8 rounded-[40px] flex items-center justify-between cursor-pointer hover:border-purple-400 hover:shadow-2xl hover:-translate-y-2 transition-all shadow-sm"
+          >
+            <div className="flex items-center gap-6">
+              <div className="p-4 bg-slate-50 rounded-[24px] group-hover:bg-purple-50 transition-colors">
+                {tool.icon}
+              </div>
+              <div>
+                <h3 className="font-black text-xl text-slate-900 leading-tight">{tool.name}</h3>
+                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{tool.desc}</p>
+              </div>
+            </div>
+            <ExternalLink className="w-6 h-6 text-slate-200 group-hover:text-purple-500 transition-colors" />
+          </div>
+        ))}
+
+        {/* ПРОБКИ (ПУСТЫЕ СЛОТЫ) */}
+        {placeholders.map((p, idx) => (
+          <div 
+            key={idx}
+            className="bg-slate-50 border-2 border-dashed border-slate-200 p-8 rounded-[40px] flex items-center justify-between opacity-60 hover:opacity-100 transition-all cursor-help"
+          >
+            <div className="flex items-center gap-6">
+              <div className="p-4 bg-white rounded-[24px]">
+                <Plus className="w-8 h-8 text-slate-300" />
+              </div>
+              <div>
+                <h3 className="font-black text-xl text-slate-400 leading-tight">{p.name}</h3>
+                <p className="text-sm font-bold text-slate-300 uppercase tracking-widest">{p.desc}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="frontend/tailwind.config.js">
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+}
+</file>
+
+<file path="frontend/vite.config.js">
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+</file>
+
+<file path="frontend/postcss.config.js">
+export default {
+  plugins: {
+    '@tailwindcss/postcss': {},
+    autoprefixer: {},
+  },
+}
+</file>
+
+<file path="frontend/src/App.css">
+
+</file>
+
+<file path="frontend/src/Board.jsx">
+import React, { useState, useMemo, memo } from 'react';
+import {
+  Minimize2, Plus, Trash2, Link,
+  CheckCircle2, Sparkles, ChevronDown, X,
+  ChevronLeft, ChevronRight, Calendar as CalendarIcon
+} from 'lucide-react';
+import api from './api';
+import PromptModal from './PromptModal';
+
+// --- глобальные настройки ---
+const mnsSettings = {
+  style: "high-end commercial photography, Pinterest aesthetic, minimalist, clean lines, bright light-gray background, highly detailed, photorealistic",
+  brand: "focus on modern stylish shoes, footwear photography, fashion brand catalog style. МНС-Обувь - производство качественной и стильной обуви.",
+  typo: "📌 Типографика:\n- Гротеск с мягкими формами, без острых углов.\n- Основной: FindSansPro Bold."
+};
+
+const platformsInfo = [
+  { id: "VK", label: "VK", activeClass: "bg-blue-600 text-white shadow-lg shadow-blue-300/50" },
+  { id: "TG", label: "TG", activeClass: "bg-sky-500 text-white shadow-lg shadow-sky-300/50" },
+  { id: "INST", label: "IG", activeClass: "bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg shadow-pink-300/50" },
+  { id: "YT", label: "YT", activeClass: "bg-red-600 text-white shadow-lg shadow-red-300/50" },
+  { id: "MAX", label: "MX", activeClass: "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-300/50" }
+];
+
+const getEmptyPlatform = () => ({
+  step: 0, rubric: "", format: "", promptTab: "text",
+  textPrompt: { role: "Ты креативный SMM-специалист.", tone: "", details: "", constraints: "", useMns: true },
+  visualPrompt: { format: "Картинка 1:1", essence: "", useColors: false, colors: [], useMns: true, textOverlay: "" },
+  finalText: "", refs: "", mediaLink: ""
+});
+
+const CustomSelect = ({ label, value, options, onChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="relative w-full text-left">
+      <div className="text-xs font-black text-slate-500 uppercase tracking-widest mb-2 pl-1">{label}</div>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between bg-[var(--bg-input)] border-2 border-[var(--border-main)] p-5 rounded-2xl hover:border-purple-400 transition-all group"
+      >
+        <span className="text-base font-black text-[var(--text-main)]">{value || "Выберите..."}</span>
+        <ChevronDown className={`w-6 h-6 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)}></div>
+          <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-card)] border-2 border-[var(--border-main)] shadow-2xl rounded-[24px] z-50 py-3 animate-in fade-in slide-in-from-top-2 overflow-hidden">
+            {options.map((opt) => (
+              <button
+                key={opt}
+                onClick={() => { onChange(opt); setIsOpen(false); }}
+                className={`w-full text-left px-6 py-4 text-sm font-black transition-colors hover:bg-purple-50 dark:hover:bg-purple-900/30 ${value === opt ? 'text-purple-600 bg-purple-50/50' : 'text-[var(--text-main)]'}`}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// --- компонент карточки ---
+const PostCard = memo(function PostCard({ post, refreshPosts, onOpenPrompt }) {
+  const [localPost, setLocalPost] = useState(post);
+  const [activePlatform, setActivePlatform] = useState(Object.keys(post?.platforms || {})[0] || 'VK');
+
+  const saveToDB = async (updatedPost) => {
+    try { await api.updatePost(updatedPost.id, updatedPost); }
+    catch (e) { console.error("Ошибка сохранения:", e); }
+  };
+
+  const updatePlatformData = (field, value) => {
+    const updated = { ...localPost };
+    if (!updated.platforms) updated.platforms = {};
+    if (!updated.platforms[activePlatform]) updated.platforms[activePlatform] = getEmptyPlatform();
+    updated.platforms[activePlatform][field] = value;
+    setLocalPost(updated);
+    saveToDB(updated);
+  };
+
+  const updatePromptData = (promptType, field, value) => {
+    const updated = { ...localPost };
+    if (!updated.platforms?.[activePlatform]) return;
+    if (!updated.platforms[activePlatform][promptType]) {
+      updated.platforms[activePlatform][promptType] = getEmptyPlatform()[promptType];
+    }
+    updated.platforms[activePlatform][promptType][field] = value;
+    setLocalPost(updated);
+    saveToDB(updated);
+  };
+
+  const toggleColor = (color) => {
+    const updated = { ...localPost };
+    const vp = updated.platforms?.[activePlatform]?.visualPrompt;
+    if (!vp) return;
+    if (!vp.colors) vp.colors = [];
+    vp.colors = vp.colors.includes(color) ? vp.colors.filter(c => c !== color) : [...vp.colors, color];
+    setLocalPost(updated); saveToDB(updated);
+  };
+
+  const pData = localPost?.platforms?.[activePlatform] || getEmptyPlatform();
+  const setStep = (num) => updatePlatformData('step', num);
+
+  const generatePrompt = () => {
+    const data = localPost?.platforms?.[activePlatform] || getEmptyPlatform();
+    const briefSection = `--- ИСХОДНЫЙ БРИФ ---\n[Рубрика]: ${data.rubric || 'Не выбрана'}\n[Формат]: ${data.format || 'Не выбран'}\n[Бренд]: ${mnsSettings.brand}\n\n`;
+    let resultStr = briefSection;
+
+    if (data.promptTab === 'text') {
+      const tp = data.textPrompt || {};
+      resultStr += `--- ТЕХНИЧЕСКОЕ ЗАДАНИЕ НА ТЕКСТ ---\n[Роль]: ${tp.role}\n[Тема]: ${localPost.topic}\n[Детали задачи]: ${tp.details}\n\n${mnsSettings.typo}`;
+    } else {
+      const vp = data.visualPrompt || {};
+      const colors = vp.colors?.length > 0 ? `\n[Цветовая палитра]: ${vp.colors.join(', ')}` : '';
+      resultStr += `--- ТЕХНИЧЕСКОЕ ЗАДАНИЕ НА ВИЗУАЛ ---\n[AI Prompt]: ${vp.essence}\n[Стиль]: ${mnsSettings.style}${colors}`;
+    }
+    onOpenPrompt(resultStr);
+  };
+
+  const isPromptReady = pData.promptTab === 'text'
+    ? pData.textPrompt?.details?.trim().length > 0
+    : pData.visualPrompt?.essence?.trim().length > 0;
+
+  return (
+    <div className="theme-card p-8 md:p-10 rounded-[40px] shadow-xl bg-[var(--bg-card)] flex flex-col gap-8 border-2 border-[var(--border-main)] transition-all">
+      <div className="flex gap-3 bg-[var(--bg-input)] p-2 rounded-2xl overflow-x-auto hide-scroll shrink-0 border border-[var(--border-main)]">
+        {platformsInfo.map(plat => {
+          const hasContent = localPost?.platforms?.[plat.id]?.step >= 1;
+          const isActive = plat.id === activePlatform;
+          return (
+            <button
+              key={plat.id}
+              onClick={() => setActivePlatform(plat.id)}
+              className={`text-sm font-black uppercase px-8 py-4 rounded-xl transition-all shrink-0 ${isActive ? plat.activeClass : (hasContent ? 'bg-[var(--bg-card)] text-[var(--text-main)] border border-[var(--border-main)]' : 'text-[var(--text-muted)] hover:bg-white')
+                }`}
+            >
+              {plat.label}
+            </button>
+          );
+        })}
+      </div>
+
+      <input
+        type="text"
+        value={localPost.topic}
+        onChange={(e) => setLocalPost({ ...localPost, topic: e.target.value })}
+        onBlur={() => saveToDB(localPost)}
+        placeholder="Тема поста..."
+        className="w-full font-black text-4xl outline-none bg-transparent border-b-4 border-slate-100 focus:border-purple-400 pb-3 text-[var(--text-main)] transition-colors"
+      />
+
+      <div className="flex gap-4 mt-2">
+        {["Бриф", "Промпт", "СММ", "Дизайн", "Готово"].map((s, idx) => (
+          <div key={s} onClick={() => setStep(idx)} className="flex flex-col items-center gap-3 flex-1 cursor-pointer group">
+            <div className={`h-4 w-full rounded-full transition-all ${idx < pData.step ? 'bg-green-500' : idx === pData.step ? 'bg-purple-600 shadow-lg shadow-purple-500/30' : 'bg-[var(--bg-input)] group-hover:bg-slate-300'}`}></div>
+            <span className={`text-[13px] uppercase font-black tracking-tight ${idx <= pData.step ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)]'}`}>{s}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="min-h-[300px] py-4">
+        {pData.step === 0 && (
+          <div className="space-y-8 fade-in">
+            <CustomSelect label="Рубрика" value={pData.rubric} options={["Продающий", "Вовлекающий", "Экспертный", "Ситуативный"]} onChange={(v) => updatePlatformData('rubric', v)} />
+            <CustomSelect label="Формат" value={pData.format} options={["Текст + Фото", "Видео/Reels", "Инфографика"]} onChange={(v) => updatePlatformData('format', v)} />
+            <button onClick={() => setStep(1)} className="w-full py-6 mt-4 bg-slate-900 dark:bg-purple-600 text-white rounded-2xl font-black text-base uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl">Далее ➔</button>
+          </div>
+        )}
+
+        {pData.step === 1 && (
+          <div className="space-y-6 fade-in flex flex-col">
+            <div className="flex bg-[var(--bg-input)] p-2 rounded-2xl shrink-0 border border-[var(--border-main)]">
+              <button onClick={() => updatePlatformData('promptTab', 'text')} className={`flex-1 py-4 text-sm font-black rounded-xl transition-all ${pData.promptTab === 'text' ? 'bg-[var(--bg-card)] text-purple-600 shadow-md' : 'text-[var(--text-muted)]'}`}>ТЕКСТ</button>
+              <button onClick={() => updatePlatformData('promptTab', 'visual')} className={`flex-1 py-4 text-sm font-black rounded-xl transition-all ${pData.promptTab !== 'text' ? 'bg-[var(--bg-card)] text-purple-600 shadow-md' : 'text-[var(--text-muted)]'}`}>ВИЗУАЛ</button>
+            </div>
+            <div className="bg-slate-50/50 p-6 rounded-[32px] border-2 border-[var(--border-main)] space-y-6 text-left flex-1">
+              {pData.promptTab === 'text' ? (
+                <>
+                  <div>
+                    <label className="text-xs font-black text-slate-500 uppercase pl-1">Роль ИИ</label>
+                    <input type="text" value={pData?.textPrompt?.role || ""} onChange={(e) => updatePromptData('textPrompt', 'role', e.target.value)} className="w-full mt-2 text-base font-bold bg-white p-5 rounded-2xl border-2 border-[var(--border-main)] text-[var(--text-main)] outline-none focus:border-purple-400" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-black text-slate-500 uppercase pl-1">Суть поста</label>
+                    <textarea value={pData?.textPrompt?.details || ""} onChange={(e) => updatePromptData('textPrompt', 'details', e.target.value)} placeholder="Опишите задачу подробнее..." className="w-full mt-2 text-base font-bold bg-white p-5 rounded-2xl border-2 border-[var(--border-main)] text-[var(--text-main)] h-40 resize-none outline-none focus:border-purple-400" />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <label className="text-xs font-black text-slate-500 uppercase pl-1">Что на картинке?</label>
+                    <textarea value={pData?.visualPrompt?.essence || ""} onChange={(e) => updatePromptData('visualPrompt', 'essence', e.target.value)} placeholder="Опишите визуал..." className="w-full mt-2 text-base font-bold bg-white p-5 rounded-2xl border-2 border-[var(--border-main)] text-[var(--text-main)] h-40 resize-none outline-none focus:border-purple-400" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {['Amethyst', 'Tiffany', 'Peach', 'Slate'].map(c => (
+                      <label key={c} className="flex items-center gap-4 text-sm font-black text-[var(--text-main)] cursor-pointer p-3 hover:bg-white rounded-xl transition-all border border-transparent hover:border-slate-200">
+                        <input type="checkbox" checked={pData?.visualPrompt?.colors?.includes(c)} onChange={() => toggleColor(c)} className="w-5 h-5 accent-purple-50" />
+                        {c}
+                      </label>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="flex gap-4 shrink-0">
+              <button
+                onClick={generatePrompt}
+                className={`flex-1 py-6 rounded-2xl font-black text-base uppercase tracking-widest shadow-xl transition-all active:scale-95 flex justify-center items-center gap-3 ${isPromptReady
+                    ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-200"
+                    : "bg-purple-600 hover:bg-purple-700 text-white shadow-purple-200"
+                  }`}
+              >
+                {isPromptReady ? (
+                  <><CheckCircle2 className="w-6 h-6" /> Посмотреть ТЗ</>
+                ) : (
+                  <><Sparkles className="w-6 h-6" /> Сгенерировать ТЗ</>
+                )}
+              </button>
+              <button onClick={() => setStep(2)} className="w-20 bg-slate-900 text-white rounded-2xl font-black text-xl flex items-center justify-center transition-all hover:bg-slate-800 active:scale-95 shadow-xl">➔</button>
+            </div>
+          </div>
+        )}
+
+        {pData.step === 2 && (
+          <div className="space-y-6 fade-in flex flex-col text-left">
+            <div className="bg-green-50/50 p-6 rounded-[32px] border-2 border-green-200 flex-1 flex flex-col min-h-[200px]">
+              <label className="text-xs font-black text-green-700 uppercase tracking-widest mb-3 pl-1">Текст поста для публикации</label>
+              <textarea value={pData.finalText} onChange={(e) => updatePlatformData('finalText', e.target.value)} placeholder="Вставьте готовый текст..." className="w-full text-base font-bold bg-white p-6 rounded-2xl border-2 border-green-100 outline-none text-[var(--text-main)] flex-1 resize-none focus:ring-4 ring-green-400/10" />
+            </div>
+            <div className="bg-slate-50 p-6 rounded-[32px] border-2 border-slate-200">
+              <label className="text-xs font-black text-slate-500 uppercase tracking-widest mb-3 pl-1">Референсы</label>
+              <input type="text" value={pData.refs} onChange={(e) => updatePlatformData('refs', e.target.value)} placeholder="https://..." className="w-full text-base font-bold bg-white p-5 rounded-2xl border-2 border-slate-100 outline-none text-[var(--text-main)] focus:ring-4 ring-slate-400/10" />
+            </div>
+            <button onClick={() => setStep(3)} className="w-full py-6 bg-slate-900 text-white rounded-2xl font-black text-base uppercase tracking-wide hover:bg-slate-800 active:scale-95 transition-all shadow-xl">В Дизайн ➔</button>
+          </div>
+        )}
+
+        {pData.step === 3 && (
+          <div className="space-y-6 fade-in h-full flex flex-col text-left">
+            <div className="bg-blue-50/50 p-8 rounded-[32px] border-2 border-blue-200 flex-1">
+              <div className="flex items-center gap-4 mb-6 text-blue-700">
+                <Link className="w-6 h-6" />
+                <label className="text-sm font-black uppercase tracking-widest">Ссылка на результат (облако)</label>
+              </div>
+              <textarea value={pData.mediaLink} onChange={(e) => updatePlatformData('mediaLink', e.target.value)} placeholder="Google Drive, Pinterest..." className="w-full text-base font-bold bg-white p-6 rounded-2xl border-2 border-blue-100 outline-none text-[var(--text-main)] h-48 resize-none focus:ring-4 ring-blue-500/10" />
+            </div>
+            <button onClick={() => setStep(4)} className="w-full py-6 bg-blue-600 text-white rounded-2xl font-black text-base uppercase tracking-wide shadow-xl hover:bg-blue-700 active:scale-95 transition-all">Медиа готово ➔</button>
+          </div>
+        )}
+
+        {pData.step === 4 && (
+          <div className="space-y-6 fade-in text-center mt-10">
+            <div className="bg-emerald-50 border-2 border-emerald-100 p-16 rounded-[48px] shadow-inner">
+              <CheckCircle2 className="w-24 h-24 text-emerald-500 mx-auto mb-6" />
+              <h4 className="font-black text-emerald-900 text-2xl uppercase tracking-tighter">Пост полностью готов 🎉</h4>
+            </div>
+            <button onClick={() => setStep(2)} className="w-full py-6 bg-white border-2 border-[var(--border-main)] text-slate-500 rounded-2xl font-black text-base hover:bg-slate-50 transition-all">Нужны правки</button>
+          </div>
+        )}
+      </div>
+
+      <div className="flex justify-end border-t-2 border-slate-50 pt-6">
+        <button
+          onClick={async () => { if (window.confirm("Удалить карточку?")) { await api.deletePost(localPost.id); refreshPosts(); } }}
+          className="text-sm font-black text-slate-400 hover:text-red-500 transition-all p-3 flex items-center gap-2 rounded-xl hover:bg-red-50"
+        >
+          <Trash2 className="w-5 h-5" /> Удалить карточку
+        </button>
+      </div>
+    </div>
+  );
+});
+
+// --- ГЛАВНЫЙ КОМПОНЕНТ BOARD ---
+const Board = memo(function Board({ projectId, posts, refreshPosts }) {
+  const [viewDate, setViewDate] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [modal, setModal] = useState({ open: false, text: "" });
+
+  const { days, monthName, year, shift } = useMemo(() => {
+    const year = viewDate.getFullYear();
+    const month = viewDate.getMonth();
+    const monthName = new Intl.DateTimeFormat('ru-RU', { month: 'long' }).format(viewDate);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayIndex = new Date(year, month, 1).getDay();
+    const shift = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
+
+    const daysArray = Array.from({ length: daysInMonth }, (_, i) => {
+      const d = i + 1;
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const dateObj = new Date(year, month, d);
+      return {
+        num: d,
+        dateStr,
+        weekdayShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'][dateObj.getDay()],
+        weekdayFull: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'][dateObj.getDay()]
+      };
+    });
+    return { days: daysArray, monthName, year, shift };
+  }, [viewDate]);
+
+  const changeMonth = (offset) => {
+    setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + offset, 1));
+  };
+
+  // --- логика AI импорта ---
+  const handleAIImport = async () => {
+    const jsonString = prompt("Вставь JSON контент-план от нейронки сюда:");
+    if (!jsonString) return;
+
+    try {
+      const data = JSON.parse(jsonString);
+      const postsArray = Array.isArray(data) ? data : (data.posts || data.data);
+
+      if (!Array.isArray(postsArray)) {
+        return alert("Ошибка: JSON должен содержать массив постов.");
+      }
+
+      const promises = postsArray.map(post => 
+        api.createPost({
+          project_id: projectId,
+          publish_date: post.publish_date,
+          topic: post.topic || "Новый пост",
+          platforms: post.platforms || { VK: getEmptyPlatform() }
+        })
+      );
+
+      await Promise.all(promises);
+      refreshPosts();
+      alert(`Успех! Импортировано ${postsArray.length} постов.`);
+    } catch (e) {
+      console.error("AI Import Error:", e);
+      alert("Ошибка парсинга. Убедись, что нейронка выдала чистый JSON.");
+    }
+  };
+
+  return (
+    <div className="w-full min-h-screen bg-[#F8FAFC] pb-24 overflow-y-auto">
+      <PromptModal
+        isOpen={modal.open}
+        onClose={() => setModal({ open: false, text: "" })}
+        promptText={modal.text}
+      />
+
+      {/* --- шапка календаря --- */}
+      <div className="flex items-center justify-between p-8 bg-white border-b-2 border-slate-100 mb-6 sticky top-0 z-[30]">
+        <div className="flex items-center gap-6">
+          <div className="bg-purple-600 p-3 rounded-2xl shadow-lg shadow-purple-200">
+            <CalendarIcon className="w-8 h-8 text-white" />
+          </div>
+          <div className="text-left">
+            <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tighter leading-none">
+              {monthName}
+            </h2>
+            <p className="text-slate-400 font-bold uppercase tracking-widest text-sm mt-1">{year}</p>
+          </div>
+        </div>
+
+        <div className="flex gap-3">
+          <button
+            onClick={handleAIImport}
+            className="flex items-center gap-2 px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-purple-200"
+          >
+            <Sparkles className="w-5 h-5" />
+            AI Импорт
+          </button>
+          
+          <button
+            onClick={() => changeMonth(-1)}
+            className="p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl hover:bg-white hover:border-purple-400 transition-all active:scale-90"
+          >
+            <ChevronLeft className="w-6 h-6 text-slate-600" />
+          </button>
+          <button
+            onClick={() => setViewDate(new Date())}
+            className="px-6 py-4 bg-slate-900 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-purple-600 transition-all active:scale-95 shadow-lg shadow-slate-200"
+          >
+            Сегодня
+          </button>
+          <button
+            onClick={() => changeMonth(1)}
+            className="p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl hover:bg-white hover:border-purple-400 transition-all active:scale-90"
+          >
+            <ChevronRight className="w-6 h-6 text-slate-600" />
+          </button>
+        </div>
+      </div>
+
+      {/* --- МОДАЛЬНОЕ ОКНО ДНЯ --- */}
+      {selectedDay && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-300">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl" onClick={() => setSelectedDay(null)}></div>
+          <div className="relative w-full max-w-6xl bg-white rounded-[56px] shadow-2xl border-2 border-white/20 flex flex-col max-h-[92vh] overflow-hidden animate-in zoom-in-95 duration-300">
+            <div className="flex justify-between items-center p-10 border-b-2 border-slate-100 bg-white z-10">
+              <h3 className="font-black text-4xl text-slate-900 flex items-baseline gap-4 uppercase">
+                {selectedDay.num} {monthName}
+                <span className="text-purple-600 text-xl font-black uppercase tracking-widest">
+                  {selectedDay.weekdayFull}
+                </span>
+              </h3>
+              <button onClick={() => setSelectedDay(null)} className="w-16 h-16 bg-slate-100 border-2 border-slate-200 rounded-full flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-md"><X className="w-8 h-8" /></button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-10 space-y-12 bg-slate-50/50">
+              {posts.filter(p => p.publish_date === selectedDay.dateStr).map(p => (
+                <PostCard key={p.id} post={p} refreshPosts={refreshPosts} onOpenPrompt={(t) => setModal({ open: true, text: t })} />
+              ))}
+              <button
+                onClick={() => api.createPost({ project_id: projectId, publish_date: selectedDay.dateStr, topic: "", platforms: { VK: getEmptyPlatform() } }).then(refreshPosts)}
+                className="w-full py-12 border-4 border-dashed border-slate-300 rounded-[48px] text-slate-400 font-black text-xl uppercase tracking-widest hover:border-purple-400 hover:text-purple-600 hover:bg-white transition-all flex items-center justify-center gap-4 shadow-sm"
+              >
+                <Plus className="w-10 h-10" /> Добавить контент
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- сетка календаря --- */}
+      <div className="grid grid-cols-1 md:grid-cols-7 gap-6 p-6">
+        {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(d => (
+          <div key={d} className="hidden md:block text-center text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
+            {d}
+          </div>
+        ))}
+
+        {Array.from({ length: shift }).map((_, i) => (
+          <div key={`empty-${i}`} className="hidden md:block opacity-20 bg-slate-50 border-2 border-dashed border-slate-100 rounded-[40px] h-full min-h-[150px]" />
+        ))}
+
+        {days.map(day => {
+          const dayPosts = posts.filter(p => p.publish_date === day.dateStr);
+          const activePlats = new Set();
+          dayPosts.forEach(p => {
+            if (p?.platforms) {
+              Object.keys(p.platforms).forEach(id => {
+                if (p.platforms[id]?.step >= 1) activePlats.add(id);
+              });
+            }
+          });
+
+          const isToday = day.dateStr === new Date().toISOString().split('T')[0];
+
+          return (
+            <div
+              key={day.dateStr}
+              onClick={() => setSelectedDay(day)}
+              className={`w-full bg-white border-2 ${isToday ? 'border-purple-500 ring-4 ring-purple-500/10' : 'border-slate-200'} rounded-[40px] flex flex-col items-center p-8 cursor-pointer hover:border-purple-400 hover:shadow-2xl hover:-translate-y-2 transition-all relative group shadow-sm`}
+            >
+              <span className={`text-sm font-black uppercase mb-3 tracking-widest ${isToday ? 'text-purple-600' : 'text-slate-400'}`}>
+                {day.weekdayShort}
+              </span>
+
+              <span className={`text-6xl font-black leading-none mb-6 ${isToday ? 'text-purple-600' : 'text-slate-900'}`}>
+                {day.num}
+              </span>
+
+              <div className="flex flex-wrap justify-center gap-2 mt-auto w-full">
+                {platformsInfo.map(plat => (
+                  <div
+                    key={plat.id}
+                    className={`px-4 py-2 rounded-xl text-[11px] font-black transition-all ${activePlats.has(plat.id)
+                        ? plat.activeClass
+                        : "bg-slate-50 text-slate-300 border border-slate-100 opacity-40"
+                      }`}
+                  >
+                    {plat.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+});
+
+export default Board;
+</file>
+
+<file path="frontend/src/index.css">
+@import "tailwindcss";
+
+/* 1. ПОДКЛЮЧАЕМ ПИКСЕЛЬНЫЙ ШРИФТ */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+  --bg-app: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-input: #f1f5f9;
+  --bg-column: rgba(241, 245, 249, 0.5);
+  --border-main: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --gold: #f59e0b;
+  --font-pixel: 'VT323', monospace;
+}
+
+[data-theme='dark'] {
+  --bg-app: #020617;
+  --bg-card: #0f172a;
+  --bg-input: #1e293b;
+  --bg-column: rgba(15, 23, 42, 0.6);
+  --border-main: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --gold: #fbbf24;
+}
+
+/* 2. ТЕМА PIXEL SPACE (ПО РЕФЕРЕНСУ) */
+[data-theme='pixel'] {
+  --bg-app: #030005;     /* Глубокий космос */
+  --bg-card: #0a000f;    /* Темно-фиолетовый кристалл */
+  --bg-input: #0f0019;   /* Поля ввода */
+  --bg-column: rgba(10, 0, 15, 0.4);
+  --border-main: #1d002e; 
+  --text-main: #00ffff;  /* Неоновый Cyan */
+  --text-muted: #008b8b; 
+  --gold: #00ffff;       /* Акцентный цвет - тоже неон */
+}
+
+/* 3. ГЛОБАЛЬНЫЙ ШРИФТ ДЛЯ PIXEL SPACE */
+body[data-theme='pixel'] * {
+  font-family: var(--font-pixel) !important;
+  letter-spacing: 0.05em;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ФУНКЦИОНАЛЬНЫЕ КЛАССЫ */
+.theme-card { background-color: var(--bg-card); border: 1px solid var(--border-main); }
+.hide-scroll::-webkit-scrollbar { display: none; }
+
+/* Кастомный скролл для идей и библиотеки */
+.ideas-scroll::-webkit-scrollbar { width: 4px; }
+.ideas-scroll::-webkit-scrollbar-track { background: transparent; }
+.ideas-scroll::-webkit-scrollbar-thumb { background: var(--border-main); border-radius: 10px; }
+
+/* АНИМАЦИИ */
+
+/* Пульсация лампочки в Idea Vault */
+@keyframes bulb-glow {
+  0%, 100% { filter: drop-shadow(0 0 2px var(--gold)); opacity: 0.7; }
+  50% { filter: drop-shadow(0 0 10px var(--gold)); opacity: 1; }
+}
+.animate-bulb { animation: bulb-glow 2s infinite ease-in-out; }
+
+/* Оптимизированный Void (задний фон в библиотеке) */
+@keyframes void-pulse {
+  0%, 100% { opacity: 0.05; transform: scale(1); }
+  50% { opacity: 0.12; transform: scale(1.05); }
+}
+.animate-void {
+  animation: void-pulse 8s infinite ease-in-out;
+  will-change: opacity, transform;
+}
+
+/* Эффект карточки идеи (Облегченный Glassmorphism) */
+.idea-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-main);
+  transition: all 0.25s ease-out;
+  will-change: transform;
+}
+
+.idea-card:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--gold);
+}
+
+/* Свечение карт в библиотеке (Оптимизировано) */
+@keyframes card-glow {
+  0%, 100% { border-color: var(--border-main); box-shadow: none; }
+  50% { border-color: var(--gold); box-shadow: 0 0 15px rgba(0, 255, 255, 0.15); }
+}
+
+.library-prompt-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+}
+
+.library-prompt-card:hover {
+  transform: translateY(-5px);
+  animation: card-glow 3s infinite ease-in-out;
+}
+
+/* Матричный стиль для кода */
+pre.matrix-style {
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+.group:hover pre.matrix-style {
+  color: var(--text-main);
+}
+</file>
+
+<file path="frontend/src/PromptModal.jsx">
+import React from 'react';
+import { X, Copy } from 'lucide-react';
+
+export default function PromptModal({ isOpen, onClose, promptText }) {
+  if (!isOpen) return null;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(promptText);
+    const btn = document.getElementById('copy-btn');
+    if (!btn) return;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = 'Скопировано! ✔️';
+    btn.classList.add('bg-green-600');
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.classList.remove('bg-green-600');
+    }, 2000);
+  };
+
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-md p-6">
+      <div className="bg-white dark-theme:bg-slate-900 rounded-2xl p-8 max-w-3xl w-full shadow-2xl flex flex-col border border-slate-100 animate-in fade-in">
+        {/* Заголовок */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-black text-slate-800 flex items-center gap-3">
+            <span className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></span> Идеальное ТЗ сгенерировано
+          </h2>
+          <button onClick={onClose} className="text-slate-400 hover:text-red-500 transition-colors">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Контент */}
+        <div className="bg-[#1e1e1e] p-6 rounded-2xl mb-6 shadow-inner border border-slate-800">
+          <pre className="whitespace-pre-wrap font-mono text-[13px] text-gray-300 max-h-[50vh] overflow-y-auto hide-scroll leading-relaxed">
+            {promptText}
+          </pre>
+        </div>
+
+        {/* Кнопка копирования */}
+        <button
+          id="copy-btn"
+          onClick={handleCopy}
+          className="w-full py-4 bg-purple-600 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-lg hover:bg-purple-700 transition-all flex justify-center items-center gap-2"
+        >
+          <Copy className="w-4 h-4" /> Скопировать текст
+        </button>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="frontend/package.json">
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "axios": "^1.13.6",
+    "lucide-react": "^0.577.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1",
+    "vite": "^7.3.1"
+  }
+}
+</file>
+
+<file path="frontend/src/App.jsx">
+import React, { useState, useEffect, memo, useMemo } from 'react';
+import { 
+  FolderKanban, CalendarDays, Lightbulb, Library, 
+  Settings2, X, Save, Trash2, ChevronDown, Copy, BookOpen, Sparkles, Plus, Send, Zap, Edit3, Layers
+} from 'lucide-react';
+import api from './api';
+import Board from './Board';
+import Tools from './Tools'; // Подключаем новый файл
+import SettingsModal from './SettingsModal';
+
+// --- КОМПОНЕНТ СЕЛЕКТА ДЛЯ ШАПКИ ---
+const HeaderSelect = ({ value, options, onChange, icon: Icon }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectedOption = options.find(opt => opt.id === value);
+  return (
+    <div className="relative">
+      <button onClick={() => setIsOpen(!isOpen)} className="flex items-center gap-2.5 bg-[var(--bg-input)] border border-[var(--border-main)] rounded-xl hover:border-purple-300 transition-all px-4 py-2.5 min-w-[180px] justify-between group">
+        <div className="flex items-center gap-2.5">
+          <Icon className="w-4 h-4 text-slate-400 group-hover:text-purple-500 transition-colors" />
+          <span className="font-bold text-sm text-[var(--text-main)]">{selectedOption ? selectedOption.label : "Выберите..."}</span>
+        </div>
+        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      {isOpen && (
+        <><div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)}></div>
+        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-card)] border border-[var(--border-main)] shadow-xl rounded-2xl z-50 py-2 animate-in fade-in slide-in-from-top-2 overflow-hidden">
+          {options.map((opt) => (
+            <button key={opt.id} onClick={() => { onChange(opt.id); setIsOpen(false); }} className={`w-full text-left px-5 py-3 text-sm font-bold transition-colors hover:bg-purple-50 dark:hover:bg-purple-900/30 ${value === opt.id ? 'text-purple-600 bg-purple-50/50' : 'text-[var(--text-main)]'}`}>{opt.label}</button>
+          ))}
+        </div></>
+      )}
+    </div>
+  );
+};
+
+// --- ЦИФРОВАЯ ЛАБОРАТОРИЯ (ОБНОВЛЕННАЯ БАЗА ШАБЛОНОВ) ---
+const LibraryModal = memo(({ isOpen, onClose, library, onAdd, onUpdate, onDelete }) => {
+  const [showForm, setShowForm] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [form, setForm] = useState({ name: '', tags: '', text: '' });
+
+  if (!isOpen) return null;
+
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text);
+  };
+
+  const startEdit = (tpl) => {
+    setEditId(tpl.id);
+    setForm({ name: tpl.name, tags: tpl.tags, text: tpl.text });
+    setShowForm(true);
+  };
+
+  const submitForm = () => {
+    if (!form.name || !form.text) return;
+    if (editId) {
+      onUpdate(editId, form);
+    } else {
+      onAdd(form);
+    }
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setForm({ name: '', tags: '', text: '' });
+    setEditId(null);
+    setShowForm(false);
+  };
+
+  const systemTemplates = [
+    { name: "MNS: Студийный свет", tags: "shoes, mj", text: "Professional footwear photography, studio lighting, hyper-realistic, 8k, [PRODUCT], white background --ar 3:4" },
+    { name: "SMM: Экспертный тон", tags: "copy, branding", text: "Напиши пост от лица эксперта бренда МНС-Обувь. Тема: [ТЕМА]. Тон: уверенный, заботливый." }
+  ];
+
+  return (
+    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-[110] animate-in fade-in duration-300">
+      <div className="theme-card rounded-[32px] max-w-6xl w-full shadow-2xl flex flex-col border border-[var(--border-main)] h-[85vh] relative overflow-hidden bg-[var(--bg-card)]">
+        
+        {/* Header */}
+        <div className="p-6 border-b border-[var(--border-main)] flex justify-between items-center shrink-0 bg-[var(--bg-card)] z-10">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
+              <BookOpen className="text-white w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-xl font-black text-[var(--text-main)] tracking-tight uppercase">Prompt Lab</h2>
+              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Система управления знаниями</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            {!showForm && (
+              <button 
+                onClick={() => setShowForm(true)}
+                className="flex items-center gap-2 px-5 py-2.5 bg-purple-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-md"
+              >
+                <Plus className="w-4 h-4" /> Новый шаблон
+              </button>
+            )}
+            <button onClick={onClose} className="p-2 hover:bg-red-500 hover:text-white rounded-xl transition-all text-slate-400">
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+        
+        <div className="flex-1 overflow-hidden flex">
+          {/* Left Panel: Create/Edit Form */}
+          <div className={`border-r border-[var(--border-main)] bg-slate-50/30 dark:bg-slate-900/10 transition-all duration-500 ease-in-out flex flex-col overflow-hidden ${showForm ? 'w-[400px] opacity-100 p-8' : 'w-0 opacity-0 p-0'}`}>
+            <h3 className="font-black text-[11px] uppercase tracking-widest mb-6 flex items-center gap-2 text-purple-600">
+              {editId ? <Edit3 className="w-4 h-4"/> : <Zap className="w-4 h-4"/>} 
+              {editId ? 'Редактирование' : 'Новая запись'}
+            </h3>
+            <div className="space-y-5 flex-1 overflow-y-auto hide-scroll pr-1">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase ml-1">Название</label>
+                <input 
+                  value={form.name} onChange={e => setForm({...form, name: e.target.value})}
+                  placeholder="Введите имя..." 
+                  className="w-full p-4 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-main)] text-sm font-bold outline-none focus:border-purple-500 text-[var(--text-main)]"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase ml-1">Теги</label>
+                <input 
+                  value={form.tags} onChange={e => setForm({...form, tags: e.target.value})}
+                  placeholder="photo, shoes, copy..." 
+                  className="w-full p-4 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-main)] text-xs font-bold outline-none focus:border-purple-500 text-[var(--text-main)]"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase ml-1">Контент</label>
+                <textarea 
+                  value={form.text} onChange={e => setForm({...form, text: e.target.value})}
+                  placeholder="Текст шаблона..." 
+                  className="w-full p-5 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-main)] text-xs font-medium outline-none focus:border-purple-500 h-64 resize-none text-[var(--text-main)] leading-relaxed"
+                />
+              </div>
+            </div>
+            <div className="pt-6 flex gap-3">
+              <button onClick={resetForm} className="flex-1 py-4 text-[10px] font-black uppercase text-slate-500 bg-[var(--bg-input)] rounded-2xl hover:bg-slate-200 transition-colors">Отмена</button>
+              <button onClick={submitForm} className="flex-[2] py-4 bg-slate-900 dark:bg-purple-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl flex items-center justify-center gap-2 hover:bg-purple-700 transition-all">
+                <Send className="w-3.5 h-3.5" /> {editId ? 'Обновить' : 'Сохранить'}
+              </button>
+            </div>
+          </div>
+
+          {/* Right Panel: List */}
+          <div className="flex-1 overflow-y-auto p-8 space-y-8 bg-[var(--bg-app)]/20 ideas-scroll">
+            {/* Custom Base */}
+            <div className="space-y-5">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Ваша библиотека ({(library || []).length})</label>
+              {(library || []).length > 0 ? (
+                <div className="grid grid-cols-1 gap-4">
+                  {library.map(tpl => (
+                    <div key={tpl.id} className="bg-[var(--bg-card)] p-6 rounded-[28px] border border-[var(--border-main)] hover:border-purple-500/40 transition-all group relative overflow-hidden">
+                      <div className="flex justify-between items-start mb-4 relative z-10">
+                        <div>
+                          <h4 className="font-black text-lg text-[var(--text-main)] leading-tight">{tpl.name}</h4>
+                          <div className="flex gap-2 mt-2">
+                            {tpl.tags?.split(',').map(t => <span key={t} className="text-[9px] font-black text-purple-500 uppercase bg-purple-500/10 px-2 py-0.5 rounded">#{t.trim()}</span>)}
+                          </div>
+                        </div>
+                        <div className="flex gap-2 shrink-0">
+                          <button onClick={() => handleCopy(tpl.text)} className="p-3 bg-[var(--bg-input)] rounded-xl text-slate-500 hover:text-purple-600 transition-all"><Copy className="w-4 h-4"/></button>
+                          <button onClick={() => startEdit(tpl)} className="p-3 bg-[var(--bg-input)] rounded-xl text-slate-500 hover:text-blue-500 transition-all"><Edit3 className="w-4 h-4"/></button>
+                          <button onClick={() => onDelete(tpl.id)} className="p-3 bg-[var(--bg-input)] rounded-xl text-slate-400 hover:text-red-500 transition-all"><Trash2 className="w-4 h-4"/></button>
+                        </div>
+                      </div>
+                      <pre className="p-5 bg-black/5 dark:bg-black/40 rounded-2xl font-mono text-[11px] text-[var(--text-muted)] group-hover:text-[var(--text-main)] border border-transparent transition-all overflow-x-auto whitespace-pre-wrap leading-relaxed">{tpl.text}</pre>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-20 border-2 border-dashed border-[var(--border-main)] rounded-[40px] text-center opacity-20">
+                   <Sparkles className="w-12 h-12 mx-auto mb-4" />
+                   <p className="font-black text-xs uppercase tracking-widest">Библиотека пуста</p>
+                </div>
+              )}
+            </div>
+
+            {/* System Presets */}
+            <div className="pt-8 border-t border-[var(--border-main)] space-y-4">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Примеры и готовые пресеты</label>
+              <div className="grid grid-cols-2 gap-4">
+                {systemTemplates.map(tpl => (
+                  <div key={tpl.name} className="p-6 rounded-[28px] border border-[var(--border-main)] bg-[var(--bg-card)]/50 opacity-60 hover:opacity-100 transition-all group">
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className="font-bold text-xs text-[var(--text-main)] uppercase tracking-tight">{tpl.name}</h4>
+                      <button onClick={() => handleCopy(tpl.text)} className="p-2 bg-[var(--bg-card)] rounded-lg text-slate-400 hover:text-purple-500 transition-colors"><Copy className="w-3.5 h-3.5"/></button>
+                    </div>
+                    <p className="text-[10px] text-[var(--text-muted)] line-clamp-2 italic leading-relaxed">"{tpl.text}"</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// --- ГЛАВНЫЙ КОМПОНЕНТ ---
+export default function App() {
+  const [projectId, setProjectId] = useState('mns');
+  const [activeTab, setActiveTab] = useState('board'); // Состояние для вкладок: 'board' или 'tools'
+  const [theme, setTheme] = useState('light');
+  const [posts, setPosts] = useState([]);
+  const [ideas, setIdeas] = useState([]);
+  const [library, setLibrary] = useState([]); 
+  
+  const [isIdeasOpen, setIsIdeasOpen] = useState(false);
+  const [isLibraryOpen, setIsLibraryOpen] = useState(false); 
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [newIdeaText, setNewIdeaText] = useState('');
+
+  useEffect(() => { document.documentElement.setAttribute('data-theme', theme); }, [theme]);
+  useEffect(() => { fetchData(); fetchLibrary(); }, [projectId]);
+
+  const fetchData = async () => {
+    try { 
+      const postsRes = await api.getPosts(projectId); 
+      const ideasRes = await api.getIdeas(projectId); 
+      setPosts(postsRes.data || []); setIdeas(ideasRes.data || []); 
+    } catch (e) { console.error(e); }
+  };
+
+  const fetchLibrary = async () => {
+    try { const res = await api.getLibrary(); setLibrary(res.data || []); } catch (e) { console.error(e); }
+  };
+
+  const handleAddPrompt = async (data) => {
+    await api.createLibraryPrompt(data);
+    fetchLibrary();
+  };
+
+  const handleUpdatePrompt = async (id, data) => {
+    await api.updateLibraryPrompt(id, data);
+    fetchLibrary();
+  };
+
+  const handleDeletePrompt = async (id) => {
+    if(!window.confirm("Удалить этот шаблон навсегда?")) return;
+    await api.deleteLibraryPrompt(id);
+    fetchLibrary();
+  };
+
+  const handleAddIdea = async () => {
+    if (!newIdeaText.trim()) return;
+    const res = await api.createIdea({ project_id: projectId, text: newIdeaText });
+    setIdeas([...ideas, res.data]); setNewIdeaText('');
+  };
+
+  const handleDeleteIdea = async (id) => { await api.deleteIdea(id); setIdeas(ideas.filter(i => i.id !== id)); };
+
+  const boardView = useMemo(() => (
+    <Board projectId={projectId} posts={posts} refreshPosts={fetchData} />
+  ), [projectId, posts]);
+
+  return (
+    <div className="h-screen flex flex-col overflow-hidden font-sans">
+      <header className="bg-[var(--bg-card)]/80 backdrop-blur-md border-b border-[var(--border-main)] px-6 py-3 flex justify-between items-center z-20 shrink-0">
+        <div className="flex items-center gap-5">
+          <h1 className="text-2xl font-black bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent tracking-tight">PromptAGG</h1>
+          <div className="h-6 w-px bg-[var(--border-main)]"></div>
+          
+          {/* ВЫБОР ПРОЕКТА */}
+          <div className="flex items-center gap-2 bg-[var(--bg-input)] p-1 rounded-xl border border-[var(--border-main)]">
+            {['mns', 'moshelovka', 'nelimita'].map(id => (
+              <button key={id} onClick={() => setProjectId(id)} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase transition-all ${projectId === id ? 'bg-[var(--bg-card)] text-purple-600 shadow-sm' : 'text-slate-400'}`}>{id}</button>
+            ))}
+          </div>
+        </div>
+
+        {/* --- ПЕРЕКЛЮЧАТЕЛЬ ВКЛАДОК (ЦЕНТР) --- */}
+        <div className="flex items-center bg-[var(--bg-input)] p-1 rounded-2xl border border-[var(--border-main)] shadow-inner">
+           <button 
+             onClick={() => setActiveTab('board')}
+             className={`flex items-center gap-2 px-6 py-2 rounded-xl text-xs font-black uppercase transition-all ${activeTab === 'board' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-[var(--text-main)]'}`}
+           >
+             <CalendarDays className="w-3.5 h-3.5" /> Календарь
+           </button>
+           <button 
+             onClick={() => setActiveTab('tools')}
+             className={`flex items-center gap-2 px-6 py-2 rounded-xl text-xs font-black uppercase transition-all ${activeTab === 'tools' ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:text-[var(--text-main)]'}`}
+           >
+             <Layers className="w-3.5 h-3.5" /> Нейронки
+           </button>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <button onClick={() => setIsIdeasOpen(!isIdeasOpen)} className="flex items-center gap-2.5 text-sm font-bold text-amber-500 bg-amber-500/10 dark:bg-amber-500/10 px-5 py-3 rounded-xl border border-amber-500/20 hover:border-amber-500/50 hover:bg-amber-500/20 active:scale-95 transition-all">
+            <Lightbulb className={`w-4 h-4 ${ideas.length > 0 ? 'animate-bulb text-amber-400' : ''}`} /> Багаж 
+            <span className="bg-amber-500 text-white px-2.5 py-0.5 rounded-full text-[11px] font-black shadow-[0_0_10px_rgba(245,158,11,0.5)]">{ideas.length}</span>
+          </button>
+          <button onClick={() => setIsLibraryOpen(true)} className="flex items-center gap-2.5 text-sm font-bold text-slate-500 dark:text-slate-300 bg-[var(--bg-input)] px-5 py-3 rounded-xl border border-[var(--border-main)] hover:border-purple-300 active:scale-95 transition-all shadow-sm">
+            <Library className="w-4 h-4 text-purple-500" /> База
+          </button>
+          <button onClick={() => setIsSettingsOpen(true)} className="w-12 h-12 bg-slate-900 dark:bg-purple-600 text-white rounded-xl flex items-center justify-center shadow-lg hover:scale-105 transition-all"><Settings2 className="w-5 h-5" /></button>
+        </div>
+      </header>
+
+      {/* --- КОНТЕНТ (УСЛОВНЫЙ РЕНДЕРИНГ) --- */}
+      <main className="flex-1 overflow-x-auto overflow-y-auto p-6 flex gap-4 items-start relative ideas-scroll">
+        {activeTab === 'board' ? boardView : <Tools />}
+      </main>
+
+      {/* --- IDEA VAULT --- */}
+      <div className={`fixed right-0 top-[73px] h-[calc(100vh-73px)] w-[420px] bg-[var(--bg-card)] shadow-[-30px_0_50px_rgba(0,0,0,0.3)] border-l border-[var(--border-main)] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-30 flex flex-col transform-gpu will-change-transform ${isIdeasOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        
+        <div className="p-6 border-b border-[var(--border-main)] flex justify-between items-center relative overflow-hidden shrink-0">
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-amber-500/10 blur-3xl rounded-full pointer-events-none"></div>
+          <div className="flex items-center gap-4 relative z-10">
+            <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+              <Lightbulb className="text-amber-500 w-6 h-6 animate-bulb" />
+            </div>
+            <div>
+              <h2 className="text-xl font-black text-[var(--text-main)] tracking-tight uppercase">Idea Vault</h2>
+              <p className="text-[9px] font-bold text-amber-500/70 uppercase tracking-[0.2em]">Нейро-хранилище</p>
+            </div>
+          </div>
+          <button onClick={() => setIsIdeasOpen(false)} className="p-2 bg-[var(--bg-input)] hover:bg-red-500/20 hover:text-red-500 text-slate-400 rounded-xl transition-all relative z-10 border border-transparent hover:border-red-500/30">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6 space-y-5 bg-[var(--bg-app)]/50 ideas-scroll relative">
+          <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(var(--border-main) 1px, transparent 1px)', backgroundSize: '20px 20px', opacity: 0.3 }}></div>
+          
+          <div className="relative z-10 space-y-4">
+              {ideas.map((idea, idx) => (
+                <div key={idea.id} className="relative group p-5 rounded-[24px] bg-[var(--bg-card)] border border-[var(--border-main)] hover:border-amber-500/50 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(245,158,11,0.12)] hover:-translate-y-1 overflow-hidden cursor-default">
+                  <div className="absolute -right-8 -bottom-8 w-24 h-24 bg-amber-500/0 group-hover:bg-amber-500/10 blur-2xl transition-all duration-500 rounded-full"></div>
+                  
+                  <span className="absolute -right-2 top-2 text-6xl font-black text-[var(--text-muted)] opacity-5 group-hover:opacity-10 group-hover:text-amber-500 transition-all duration-300 italic pointer-events-none select-none">
+                    {(idx + 1).toString().padStart(2, '0')}
+                  </span>
+                  
+                  <div className="flex justify-between items-start gap-4 relative z-10">
+                    <p className="text-sm font-medium text-[var(--text-main)] leading-relaxed">{idea.text}</p>
+                    <button onClick={() => handleDeleteIdea(idea.id)} className="p-2 bg-[var(--bg-input)] text-slate-400 opacity-0 group-hover:opacity-100 rounded-xl transition-all hover:bg-red-500 hover:text-white hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] shrink-0 border border-transparent hover:border-red-400">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+              
+              {ideas.length === 0 && (
+                <div className="py-20 flex flex-col items-center justify-center opacity-30 text-[var(--text-main)]">
+                  <Sparkles className="w-12 h-12 mb-4" />
+                  <p className="font-black text-xs uppercase tracking-widest text-center">Хранилище пусто<br/><span className="text-[9px] text-[var(--text-muted)]">Ожидание данных...</span></p>
+                </div>
+              )}
+          </div>
+        </div>
+
+        <div className="p-6 border-t border-[var(--border-main)] bg-[var(--bg-card)] relative z-10">
+          <div className="relative group mb-4">
+            <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-amber-500/50 rounded-tl-lg opacity-0 group-focus-within:opacity-100 transition-all duration-300"></div>
+            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-amber-500/50 rounded-br-lg opacity-0 group-focus-within:opacity-100 transition-all duration-300"></div>
+            
+            <textarea 
+              value={newIdeaText} 
+              onChange={(e) => setNewIdeaText(e.target.value)} 
+              placeholder="Инициализация потока мыслей..." 
+              className="w-full p-5 bg-[var(--bg-input)] rounded-2xl text-sm font-medium outline-none border border-[var(--border-main)] focus:border-amber-500/40 focus:bg-[var(--bg-card)] focus:shadow-[inset_0_0_20px_rgba(245,158,11,0.05)] h-32 resize-none transition-all text-[var(--text-main)] placeholder:text-[var(--text-muted)]" 
+            />
+          </div>
+          <button onClick={handleAddIdea} className="w-full py-4 bg-[var(--bg-input)] hover:bg-amber-500 text-[var(--text-main)] hover:text-slate-900 border border-[var(--border-main)] hover:border-amber-400 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] transition-all duration-300 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] active:scale-95 flex justify-center items-center gap-2 group">
+            <Save className="w-4 h-4 group-hover:animate-pulse" /> Синхронизировать
+          </button>
+        </div>
+      </div>
+
+      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} currentTheme={theme} setTheme={setTheme} projectId={projectId} />
+      
+      <LibraryModal 
+        isOpen={isLibraryOpen} 
+        onClose={() => setIsLibraryOpen(false)} 
+        library={library}
+        onAdd={handleAddPrompt}
+        onUpdate={handleUpdatePrompt}
+        onDelete={handleDeletePrompt}
+      />
+    </div>
+  );
+}
+</file>
+
+</files>

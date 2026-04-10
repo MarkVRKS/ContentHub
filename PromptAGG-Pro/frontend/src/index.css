@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+:root {
+  --bg-app: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-input: #f1f5f9;
+  --border-main: #e2e8f0;
+  --border-hover: #9333ea;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --accent: #9333ea;
+  --accent-glow: rgba(147, 51, 234, 0.12);
+  --grad-1: #7e22ce;
+  --grad-2: #2563eb;
+  --gold: #f59e0b;
+}
+
+/* ТЕМА: OBSIDIAN NIGHT (DARK) */
+[data-theme='dark'] {
+  --bg-app: #020617;
+  --bg-card: #0f172a;
+  --bg-input: #1e293b;
+  --border-main: #1e293b;
+  --border-hover: #c084fc;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #a855f7;
+  --accent-glow: rgba(168, 85, 247, 0.2);
+  --grad-1: #9333ea;
+  --grad-2: #3b82f6;
+}
+
+/* ТЕМА: TITANIUM GLASS (HIGH-END TECH) */
+[data-theme='titanium'] {
+  --bg-app: #050505;
+  --bg-card: #0a0a0a;
+  --bg-input: #141414;
+  --border-main: #262626;
+  --border-hover: #22d3ee;
+  --text-main: #ffffff;
+  --text-muted: #737373;
+  --accent: #22d3ee;
+  --accent-glow: rgba(34, 211, 238, 0.15);
+  --grad-1: #0891b2;
+  --grad-2: #172554;
+}
+
+/* ТЕМА: AURORA STUDIO (CREATIVE VIBE) */
+[data-theme='aurora'] {
+  --bg-app: #020024;
+  --bg-card: rgba(15, 2, 36, 0.6);
+  --bg-input: rgba(255, 255, 255, 0.05);
+  --border-main: rgba(255, 255, 255, 0.1);
+  --border-hover: #ff00c8;
+  --text-main: #ffffff;
+  --text-muted: #b4a9d4;
+  --accent: #ff00c8;
+  --accent-glow: rgba(255, 0, 200, 0.3);
+  --grad-1: #ff00c8;
+  --grad-2: #4c1d95;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  /* ПРЕМИАЛЬНАЯ ПЛАВНОСТЬ: используем quint-easing для всех переходов */
+  transition: background-color 0.6s cubic-bezier(0.23, 1, 0.32, 1), 
+              color 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ЭФФЕКТ СТЕКЛА */
+.glass-effect {
+  backdrop-filter: blur(25px) saturate(160%);
+  -webkit-backdrop-filter: blur(25px) saturate(160%);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-main);
+}
+
+/* ГАРМОНИЧНЫЙ СКРОЛЛ */
+.ideas-scroll::-webkit-scrollbar { width: 5px; }
+.ideas-scroll::-webkit-scrollbar-thumb { 
+  background: var(--border-main); 
+  border-radius: 10px; 
+}
+.ideas-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* АНИМАЦИИ ГЛОУ (Мягкое дыхание интерфейса) */
+@keyframes pulse-accent {
+  0%, 100% { filter: drop-shadow(0 0 5px var(--accent-glow)); opacity: 0.8; }
+  50% { filter: drop-shadow(0 0 20px var(--accent)); opacity: 1; }
+}
+.animate-accent { animation: pulse-accent 4s infinite ease-in-out; }
+
+/* УБИРАЕМ КУРСИВ */
+* { font-style: normal !important; }
+
+/* Кастомный фикс для карточек: убираем резкость при ховере */
+.group {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-font-smoothing: subpixel-antialiased;
+}

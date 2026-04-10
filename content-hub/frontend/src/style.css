@@ -25,7 +25,6 @@
     
     --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    --transition-bounce: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* ==========================================================================
@@ -61,17 +60,46 @@ body::before {
     animation: gridMove 20s linear infinite;
     pointer-events: none;
 }
-body::after {
-    content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle at 50% 0%, var(--neon-purple-dim) 0%, transparent 60%), radial-gradient(circle at 50% 100%, var(--neon-blue-dim) 0%, var(--space-900) 80%);
-    z-index: -1; pointer-events: none;
-}
 @keyframes gridMove {
     0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
     100% { transform: perspective(500px) rotateX(60deg) translateY(40px) translateZ(-200px); }
 }
 
-#app { max-width: 1400px; margin: 0 auto; padding: 2rem 3rem; display: flex; flex-direction: column; min-height: 100vh; }
+#app { 
+    max-width: 1400px; 
+    margin: 0 auto; 
+    padding: 2rem 3rem; 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+    position: relative; 
+    z-index: 10; 
+}
+
+/* ==========================================================================
+   [ СУПЕРЖЕСТКИЙ ИНТЕРАКТИВ: Свечение курсора и Холст ]
+   ========================================================================== */
+#cursor-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.12) 0%, transparent 60%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1; 
+}
+
+#nexus-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2; 
+    pointer-events: none; 
+    mix-blend-mode: screen;
+}
 
 /* ==========================================================================
    [ TOP BAR & BRANDING ]
@@ -87,7 +115,7 @@ body::after {
     font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: #fff;
     text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
 }
-.brand-icon { font-size: 1.8rem; filter: drop-shadow(0 0 10px var(--neon-blue)); }
+.brand-icon { font-size: 1.8rem; filter: drop-shadow(0 0 10px var(--neon-blue)); animation: pulseGlow 3s infinite; }
 .version {
     font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600; color: var(--neon-blue);
     background: rgba(0, 240, 255, 0.1); padding: 4px 8px; border-radius: 4px;
@@ -99,7 +127,7 @@ body::after {
     font-family: var(--font-mono); padding: 6px 12px; border-radius: 4px; cursor: pointer;
     font-size: 0.8rem; transition: var(--transition-fast);
 }
-.sys-info-btn:hover { background: var(--neon-blue-dim); box-shadow: 0 0 10px var(--neon-blue-dim); transform: translateY(-2px); }
+.sys-info-btn:hover { background: var(--neon-blue-dim); box-shadow: 0 0 15px var(--neon-blue); transform: translateY(-2px); }
 .status-indicator {
     font-family: var(--font-mono); font-size: 0.85rem; color: var(--success-green);
     display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px;
@@ -119,7 +147,7 @@ body::after {
 }
 
 /* ==========================================================================
-   [ CARDS GRID & THE CARD ]
+   [ CARDS GRID & THE 3D CARD ]
    ========================================================================== */
 .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 2rem; }
 
@@ -127,19 +155,12 @@ body::after {
     background: linear-gradient(145deg, rgba(28, 31, 46, 0.6) 0%, rgba(10, 11, 16, 0.8) 100%);
     backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border);
     border-radius: 20px; padding: 2rem; position: relative; display: flex; flex-direction: column;
-    justify-content: space-between; min-height: 240px; overflow: hidden; transition: var(--transition-smooth);
+    justify-content: space-between; min-height: 240px; overflow: hidden; 
     box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform-style: preserve-3d;
 }
-.card::after {
-    content: ''; position: absolute; top: -100%; left: 0; width: 100%; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
-    box-shadow: 0 0 20px var(--neon-blue); transition: var(--transition-smooth); opacity: 0;
-}
-.card:hover {
-    transform: translateY(-8px) scale(1.01); border-color: rgba(0, 240, 255, 0.4);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.6), 0 0 30px rgba(0, 240, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-.card:hover::after { opacity: 1; top: 100%; transition: top 1.5s ease-in-out; }
+.card-content { transform: translateZ(30px); }
+
 .card-content h3 { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: #fff; margin: 0 0 1rem 0; letter-spacing: 1px; display: flex; align-items: center; }
 .card-content h3::before { content: ''; display: inline-block; width: 8px; height: 8px; background: var(--neon-blue); margin-right: 12px; box-shadow: 0 0 10px var(--neon-blue); }
 .card-content p { color: #cbd5e1; font-size: 1rem; line-height: 1.6; margin: 0 0 2rem 0; flex-grow: 1; font-weight: 300; }
@@ -174,50 +195,55 @@ body::after {
 .btn-start::before { top: -2px; left: -2px; border-top-color: var(--neon-blue); border-left-color: var(--neon-blue); }
 .btn-start::after { bottom: -2px; right: -2px; border-bottom-color: var(--neon-blue); border-right-color: var(--neon-blue); }
 
-.btn-start .bg {
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at center, var(--neon-blue-dim) 0%, transparent 70%);
-    opacity: 0; transition: var(--transition-smooth); z-index: -1;
+/* АНИМАЦИЯ КНОПКИ "В РАБОТЕ" (Бегущий лазерный сканнер) */
+.btn-start.active {
+    color: #fff;
+    /* Создаем динамический градиент, который будет ехать по фону */
+    background: linear-gradient(90deg, 
+        rgba(0, 255, 102, 0.05) 0%, 
+        rgba(0, 255, 102, 0.4) 50%, 
+        rgba(0, 255, 102, 0.05) 100%);
+    background-size: 200% 100%;
+    animation: cyberScan 1.5s linear infinite; /* Бесконечный цикл сканирования */
+    border-color: var(--success-green);
+    box-shadow: 0 0 20px rgba(0, 255, 102, 0.3), inset 0 0 10px rgba(0, 255, 102, 0.2);
+    text-shadow: 0 0 8px #fff, 0 0 15px var(--success-green);
 }
 
-.btn-start:hover {
-    color: #fff; border-color: var(--neon-blue); background: rgba(0, 240, 255, 0.1);
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.2);
-    text-shadow: 0 0 8px #fff;
+@keyframes cyberScan {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
-.btn-start:hover::before, .btn-start:hover::after {
+
+.btn-start.active::before, .btn-start.active::after {
     width: calc(100% + 4px); height: calc(100% + 4px);
-    border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue);
+    border-color: var(--success-green); box-shadow: 0 0 15px var(--success-green);
 }
-.btn-start:active { transform: scale(0.97); border-color: var(--success-green); color: var(--success-green); }
 
 /* ==========================================================================
-   [ ABOUT OVERLAY & PAPER UNFOLD ]
+   [ ABOUT & NETWORK OVERLAYS ] ЭФФЕКТ МАТОВОГО СТЕКЛА
    ========================================================================== */
 .about-overlay {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(5, 5, 7, 0.85); backdrop-filter: blur(8px);
-    z-index: 1000; display: flex; justify-content: center; align-items: center;
-    opacity: 0; pointer-events: none; transition: opacity 0.4s ease; perspective: 1500px; 
+    /* ИЗМЕНЕНИЕ ФОНА: прозрачность снижена до 0.4, блюр увеличен до 15px */
+    background: rgba(5, 5, 7, 0.4); 
+    backdrop-filter: blur(15px);
+    z-index: 1000; display: none; 
+    justify-content: center; align-items: center;
+    opacity: 0; transition: opacity 0.4s ease; perspective: 1500px; 
 }
-.about-overlay.active { opacity: 1; pointer-events: all; }
+.about-overlay.active { display: flex; opacity: 1; pointer-events: all; }
 
 .about-paper {
-    background: linear-gradient(135deg, #161822 0%, #0d0f16 100%);
+    background: linear-gradient(135deg, rgba(22, 24, 34, 0.95) 0%, rgba(13, 15, 22, 0.95) 100%);
     border: 1px solid var(--neon-blue);
     box-shadow: 0 0 40px rgba(0, 240, 255, 0.1), inset 0 0 20px rgba(0, 240, 255, 0.05);
     width: 600px; max-width: 90%; padding: 2px; position: relative;
-    opacity: 0; transform: scale(0.1) rotate3d(1, 1, 0, 70deg);
+    opacity: 0; transform: scale3d(0, 0.01, 1);
 }
 
-.paper-content {
-    background: repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(0, 240, 255, 0.03) 28px, rgba(0, 240, 255, 0.03) 29px); 
-    padding: 40px; height: 100%;
-}
-.close-btn {
-    position: absolute; top: 20px; right: 20px; background: transparent; border: none;
-    color: var(--alert-red); font-family: var(--font-mono); cursor: pointer; font-size: 0.9rem; transition: 0.2s;
-}
+.paper-content { background: repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(0, 240, 255, 0.03) 28px, rgba(0, 240, 255, 0.03) 29px); padding: 40px; height: 100%; }
+.close-btn { position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: var(--alert-red); font-family: var(--font-mono); cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
 .close-btn:hover { text-shadow: 0 0 10px var(--alert-red); transform: scale(1.1); }
 .about-paper h2 { font-family: var(--font-display); color: #fff; font-size: 2rem; margin-top: 0; border-bottom: 2px solid var(--neon-blue-dim); padding-bottom: 10px; }
 .about-grid { display: grid; gap: 15px; margin: 30px 0; font-family: var(--font-mono); font-size: 0.9rem; }
@@ -226,85 +252,71 @@ body::after {
 .about-desc { font-size: 1.1rem; line-height: 1.6; color: #cbd5e1; margin-bottom: 30px; }
 .barcode { font-family: monospace; font-size: 2rem; color: var(--neon-blue-dim); text-align: center; letter-spacing: -2px; }
 
-@keyframes unfold {
-    0% { opacity: 0; transform: scale(0.05) rotate3d(1, 1, 1, 90deg); clip-path: polygon(40% 40%, 60% 30%, 70% 60%, 30% 70%); filter: brightness(2) contrast(1.5); }
-    30% { opacity: 1; transform: scale(0.4) rotate3d(1, -1, 0, 45deg); clip-path: polygon(20% 10%, 80% 20%, 90% 80%, 10% 90%); filter: brightness(1.2); }
-    60% { transform: scale(0.8) rotate3d(0, 1, 0, 15deg); clip-path: polygon(5% 5%, 95% 2%, 98% 95%, 2% 98%); }
-    100% { opacity: 1; transform: scale(1) rotate3d(0, 0, 0, 0deg); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); filter: brightness(1); }
-}
-@keyframes crumple {
-    0% { opacity: 1; transform: scale(1) rotate3d(0, 0, 0, 0deg); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-    40% { transform: scale(0.6) rotate3d(1, 0, 0, 30deg); clip-path: polygon(10% 15%, 85% 10%, 90% 85%, 15% 90%); filter: brightness(1.5); }
-    100% { opacity: 0; transform: scale(0.05) rotate3d(1, 1, 1, -90deg); clip-path: polygon(45% 45%, 55% 45%, 55% 55%, 45% 55%); filter: brightness(2); }
-}
-
 /* ==========================================================================
-   [ NETWORK IP REVEAL ] ИСПРАВЛЕННАЯ ГЕОМЕТРИЯ ОКНА
+   [ HOLOGRAM DEPLOYMENT ANIMATIONS ] 
    ========================================================================== */
-
-/* Расширяем конкретно бумагу для сети, чтобы IP влез */
-#network-paper {
-    width: 850px; /* Было 600px, поэтому всё плющило */
-    max-width: 95vw;
+@keyframes hologramOpen {
+    0% { opacity: 0; transform: scale3d(0, 0.01, 1); filter: brightness(5) blur(10px); }
+    30% { opacity: 1; transform: scale3d(1, 0.01, 1); filter: brightness(3) blur(2px); box-shadow: 0 0 100px var(--neon-blue); }
+    60% { transform: scale3d(1, 1.05, 1); filter: brightness(1.5) blur(0px); }
+    100% { opacity: 1; transform: scale3d(1, 1, 1); filter: brightness(1); }
 }
 
-.ip-code {
-    font-family: var(--font-mono);
-    font-size: 2.8rem; /* Чуть уменьшили размер, чтобы 11 символов влезли в ряд */
-    display: flex;
-    flex-wrap: nowrap;
-    border-radius: 12px;
-    background: rgba(10, 11, 16, 0.8);
-    border: 1px solid var(--glass-border);
-    justify-content: center;
-    box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05);
-    list-style: none;
-    padding: 0;
-    margin: 40px auto;
-    width: fit-content;
-    overflow: hidden; /* Прячем вылеты размытия за границы блока */
+@keyframes hologramClose {
+    0% { transform: scale3d(1, 1, 1); opacity: 1; filter: brightness(1); }
+    40% { transform: scale3d(1, 0.01, 1); opacity: 1; filter: brightness(4); box-shadow: 0 0 100px var(--alert-red); }
+    100% { transform: scale3d(0, 0.01, 1); opacity: 0; filter: brightness(0); }
 }
 
+#network-paper { width: 850px; max-width: 95vw; }
+.ip-code { font-family: var(--font-mono); font-size: 2.8rem; display: flex; flex-wrap: nowrap; border-radius: 12px; background: rgba(10, 11, 16, 0.8); border: 1px solid var(--glass-border); justify-content: center; box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05); list-style: none; padding: 0; margin: 40px auto; width: fit-content; overflow: hidden; }
 .ip-code:hover { cursor: crosshair; }
-
-.digit {
-    display: flex;
-    height: 100%;
-    padding: 2rem 0.5rem; /* Уменьшили боковые отступы */
-    outline: none;
-}
-
+.digit { display: flex; height: 100%; padding: 2rem 0.5rem; outline: none; }
 .digit:first-of-type { padding-left: 2rem; }
 .digit:last-of-type { padding-right: 2rem; }
+.digit span { scale: calc(var(--active, 0) + 0.3); filter: blur(calc((1 - var(--active, 0)) * 0.8rem)); transition: scale calc(((1 - var(--active, 0)) + 0.2) * 1s), filter calc(((1 - var(--active, 0)) + 0.2) * 1s); color: var(--neon-blue); text-shadow: 0 0 15px rgba(0, 240, 255, 0.6); }
+.digit.dot span { color: var(--text-muted); text-shadow: none; }
 
-.digit span {
-    scale: calc(var(--active, 0) + 0.3);
-    filter: blur(calc((1 - var(--active, 0)) * 0.8rem));
-    transition: scale calc(((1 - var(--active, 0)) + 0.2) * 1s), filter calc(((1 - var(--active, 0)) + 0.2) * 1s);
-    color: var(--neon-blue);
-    text-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
-}
-
-.digit.dot span {
-    color: var(--text-muted);
-    text-shadow: none;
-}
-
-/* ==========================================================================
-   ЛОГИКА ВОЛНЫ (ОСТАЕТСЯ БЕЗ ИЗМЕНЕНИЙ)
-   ========================================================================== */
-:root {
-    --lerp-0: 1; 
-    --lerp-1: calc(sin(50deg));
-    --lerp-2: calc(sin(45deg));
-    --lerp-3: calc(sin(35deg));
-    --lerp-4: calc(sin(25deg));
-    --lerp-5: calc(sin(15deg));
-}
-
+:root { --lerp-0: 1; --lerp-1: calc(sin(50deg)); --lerp-2: calc(sin(45deg)); --lerp-3: calc(sin(35deg)); --lerp-4: calc(sin(25deg)); --lerp-5: calc(sin(15deg)); }
 .digit:is(:hover, :focus-visible) { --active: var(--lerp-0); }
 .digit:is(:hover, :focus-visible) + .digit, .digit:has(+ .digit:is(:hover, :focus-visible)) { --active: var(--lerp-1); }
 .digit:is(:hover, :focus-visible) + .digit + .digit, .digit:has(+ .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-2); }
 .digit:is(:hover, :focus-visible) + .digit + .digit + .digit, .digit:has(+ .digit + .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-3); }
 .digit:is(:hover, :focus-visible) + .digit + .digit + .digit + .digit, .digit:has(+ .digit + .digit + .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-4); }
 .digit:is(:hover, :focus-visible) + .digit + .digit + .digit + .digit + .digit, .digit:has(+ .digit + .digit + .digit + .digit + .digit:is(:hover, :focus-visible)) { --active: var(--lerp-5); }
+
+/* ==========================================================================
+   [ CARD ACTIONS & SECONDARY BUTTON ]
+   ========================================================================== */
+.card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto; /* Прижимает кнопки к низу карточки */
+}
+
+.btn-goto {
+    background: transparent;
+    color: #a0aec0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 0.8rem;
+    border: 1px dashed var(--glass-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-goto:hover {
+    border-style: solid;
+    border-color: var(--neon-purple);
+    color: #fff;
+    background: rgba(112, 0, 255, 0.1);
+    box-shadow: 0 0 15px rgba(112, 0, 255, 0.4), inset 0 0 10px rgba(112, 0, 255, 0.2);
+    text-shadow: 0 0 8px #fff, 0 0 15px var(--neon-purple);
+}

@@ -1,0 +1,78 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "main.cjs",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "electron:start": "vite build && electron .",
+    "electron:build:mac": "vite build && electron-builder --mac",
+    "electron:build:win": "vite build && electron-builder --win"
+  },
+  "build": {
+    "appId": "com.promptagg.pro",
+    "productName": "PromptAGG Pro",
+    "asar": false,
+    "directories": {
+      "output": "release"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }, 
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "extraResources": [
+      {
+        "from": "resources",
+        "to": ".",
+        "filter": ["**/*"]
+      }
+    ],
+    "files": [
+      "dist/**/*",
+      "main.cjs",
+      "package.json"
+    ]
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "axios": "^1.13.6",
+    "express": "^4.19.2",
+    "lucide-react": "^0.577.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-joyride": "^3.0.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.27",
+    "electron": "^41.1.1",
+    "electron-builder": "^26.8.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1",
+    "vite": "^7.3.1"
+  }
+}
