@@ -4,41 +4,36 @@ from typing import Optional, Dict, Any
 
 # ----- модель контент плана -----
 class ContentPlan(SQLModel, table=True):
-    __tablename__ = "content_plan"
+    __tablename__ = "posts_plan_v3" # 🔥 ЧИТ-КОД: v3
     
     id: Optional[int] = Field(default=None, primary_key=True)
     project_id: str = Field(default="mns", index=True) 
-    
-    # --- ИСПРАВЛЕНИЕ: меняем date на str ---
     publish_date: str 
-    # ---------------------------------------
-    
     topic: str = ""
-    
     platforms: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
-    
-    # СТРОКА С prompts УДАЛЕНА! Больше никаких зависимостей.
 
 # ----- модель багажа идей -----
 class Idea(SQLModel, table=True):
-    __tablename__ = "ideas"
+    __tablename__ = "project_ideas_v3"
     
     id: Optional[int] = Field(default=None, primary_key=True)
     project_id: str = Field(default="mns", index=True)
     text: str
     
-# ----- модель для библиотеки промптов -----
+# ----- модель для библиотеки промптов (Playbook Engine) -----
 class PromptTemplate(SQLModel, table=True):
-    __tablename__ = "prompt_templates"
+    __tablename__ = "prompt_library_v3" 
     
     id: Optional[int] = Field(default=None, primary_key=True)
     type: str 
     title: str
     text: str
+    project_id: str = Field(default="mns", index=True)
+    tags: str = Field(default="")
 
 # ---- модель проектов ----
-class Project (SQLModel, table=True):
-    __tablename__ = "projects"
+class Project(SQLModel, table=True):
+    __tablename__ = "projects_v3"
 
     id: str = Field(primary_key=True)
     name: str = Field(default="")

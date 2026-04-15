@@ -2,13 +2,13 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { 
   CalendarDays, Lightbulb, BookOpen, 
   Settings2, X, Trash2, Sparkles, Send, Layers, ChevronDown, Check, Briefcase, Plus, Edit3,
-  Copy, CheckCircle2 
+  Copy, CheckCircle2, LayoutGrid
 } from 'lucide-react';
 import api, { HUB_IP } from './api';
 import Board from './Board';
 import Tools from './Tools';
+import Templates from './Templates'; // ДОБАВИЛИ ИМПОРТ
 import SettingsModal from './SettingsModal';
-import LibraryModal from './LibraryModal';
 import TutorialModal from './TutorialModal';
 import DataHubModal from './DataHubModal'; 
 
@@ -122,7 +122,6 @@ export default function App() {
   const [library, setLibrary] = useState([]); 
   
   const [isIdeasOpen, setIsIdeasOpen] = useState(false);
-  const [isLibraryOpen, setIsLibraryOpen] = useState(false); 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isDataHubOpen, setIsDataHubOpen] = useState(false);
   const [newIdeaText, setNewIdeaText] = useState('');
@@ -132,7 +131,6 @@ export default function App() {
 
   const [runTutorial, setRunTutorial] = useState(false);
 
-  // 🔥 ЛОГИКА ДЛЯ ВВОДА IP-АДРЕСА (СММЩИКАМ)
   const isManagerMode = new URLSearchParams(window.location.search).get('isManager') === 'true';
   const [tempIp, setTempIp] = useState('');
   const [showIpEntry, setShowIpEntry] = useState(!isManagerMode && !HUB_IP);
@@ -163,7 +161,7 @@ export default function App() {
   useEffect(() => { document.documentElement.setAttribute('data-theme', theme); }, [theme]);
   
   const fetchProjects = async () => {
-    if (showIpEntry) return; // Не делаем запрос, если IP еще не введен
+    if (showIpEntry) return; 
     try {
       const res = await api.getProjects();
       const list = Array.isArray(res.data) ? res.data : [];
@@ -188,7 +186,7 @@ export default function App() {
   }, [showIpEntry]);
 
   useEffect(() => {
-    if (!HUB_IP || showIpEntry) return; // Не подключаем сокеты, пока нет IP
+    if (!HUB_IP || showIpEntry) return; 
 
     let socket;
     let timeout;
@@ -196,7 +194,7 @@ export default function App() {
 
     const connect = () => {
       console.log(`📡 Подключение к WebSocket: ws://${HUB_IP}:8000/ws`);
-      socket = new WebSocket(`ws://${HUB_IP}:8000/ws`); 
+      socket = new WebSocket(`ws://${HUB_IP}:8000/ws`);
       
       socket.onmessage = (event) => { 
         if (event.data === "update_posts") { 
@@ -279,14 +277,10 @@ export default function App() {
     } catch (e) { alert("Ошибка JSON!"); }
   };
 
-  const handleAddPrompt = async (data) => { await api.createLibraryPrompt(data); fetchLibrary(); };
-  const handleUpdatePrompt = async (id, data) => { await api.updateLibraryPrompt(id, data); fetchLibrary(); };
-  const handleDeletePrompt = async (id) => { if(!window.confirm("Удалить?")) return; await api.deleteLibraryPrompt(id); fetchLibrary(); };
-
   const handleSaveContext = async (newContext) => {
     const existing = library.find(item => item.type === 'context' && item.title === projectId);
     if (existing) await api.deleteLibraryPrompt(existing.id);
-    await api.createLibraryPrompt({ type: 'context', title: projectId, text: JSON.stringify(newContext) });
+    await api.createLibraryPrompt({ type: 'context', title: projectId, text: JSON.stringify(newContext), project_id: projectId });
     fetchLibrary();
   };
 
@@ -368,34 +362,29 @@ export default function App() {
              >
                 <Layers className="w-4 h-4" /> <span className="hidden sm:inline">Нейронки</span>
              </button>
+             {/* 🔥 НОВАЯ ВКЛАДКА 🔥 */}
+             <button 
+               onClick={() => setActiveTab('templates')} 
+               className={`flex items-center gap-4 px-10 py-3.5 rounded-[24px] text-xs md:text-sm font-black uppercase tracking-widest transition-all ${
+                 activeTab === 'templates' 
+                   ? 'bg-[var(--bg-card)] text-[var(--text-main)] shadow-md border border-[var(--border-main)]' 
+                   : 'text-[var(--text-muted)] hover:text-[var(--text-main)] border border-transparent'
+               }`}
+             >
+                <LayoutGrid className="w-4 h-4" /> <span className="hidden sm:inline">Шаблоны</span>
+             </button>
           </div>
         </div>
 
         <div className="flex items-center justify-end gap-4">
-          
-          {/* 🔥 КНОПКА КОПИРОВАНИЯ IP (Только для руководителя) */}
           {managerDisplayIp && (
-            <button 
-              onClick={handleCopyIp}
-              title="Скопировать IP для отправки СММ-специалистам"
-              className="flex items-center gap-2 px-5 py-4 bg-[var(--bg-input)] text-[var(--accent)] font-black text-[10px] uppercase tracking-widest rounded-2xl border-2 border-[var(--border-main)] hover:border-[var(--accent)] hover:shadow-[0_0_15px_var(--accent-glow)] transition-all active:scale-95 mr-2"
-            >
+            <button onClick={handleCopyIp} title="Скопировать IP для отправки СММ-специалистам" className="flex items-center gap-2 px-5 py-4 bg-[var(--bg-input)] text-[var(--accent)] font-black text-[10px] uppercase tracking-widest rounded-2xl border-2 border-[var(--border-main)] hover:border-[var(--accent)] hover:shadow-[0_0_15px_var(--accent-glow)] transition-all active:scale-95 mr-2">
               {copiedIp ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
               <span>IP: {managerDisplayIp}</span>
             </button>
           )}
 
-          <button 
-            onClick={() => setIsLibraryOpen(true)} 
-            className="p-4 bg-[var(--bg-input)] text-[var(--text-muted)] rounded-2xl border-2 border-[var(--border-main)] hover:text-[var(--accent)] hover:border-[var(--border-hover)] transition-all active:scale-90 shadow-sm" 
-          >
-            <BookOpen className="w-6 h-6" />
-          </button>
-
-          <button 
-            onClick={() => setIsIdeasOpen(!isIdeasOpen)} 
-            className="flex items-center gap-4 bg-[var(--bg-input)] text-[var(--text-main)] px-8 py-4 rounded-2xl border-2 border-[var(--border-main)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all font-black text-xs md:text-sm uppercase tracking-widest relative active:scale-95 shadow-sm group"
-          >
+          <button onClick={() => setIsIdeasOpen(!isIdeasOpen)} className="flex items-center gap-4 bg-[var(--bg-input)] text-[var(--text-main)] px-8 py-4 rounded-2xl border-2 border-[var(--border-main)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-all font-black text-xs md:text-sm uppercase tracking-widest relative active:scale-95 shadow-sm group">
             <Lightbulb className={`w-5 h-5 md:w-6 md:h-6 transition-colors ${ideas.length > 0 ? 'text-[var(--gold)] animate-bulb' : ''}`} /> 
             <span className="hidden xl:inline">Багаж идей</span>
             <div className="w-7 h-7 bg-[var(--gold)] text-white rounded-full flex items-center justify-center text-xs font-black border-2 border-[var(--bg-card)] shadow-lg">
@@ -403,10 +392,7 @@ export default function App() {
             </div>
           </button>
 
-          <button 
-            onClick={() => setIsSettingsOpen(true)} 
-            className="w-14 h-14 bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--accent)] rounded-2xl border-2 border-[var(--border-main)] hover:border-[var(--border-hover)] flex items-center justify-center shadow-sm hover:shadow-[0_10px_20px_var(--accent-glow)] active:scale-90 transition-all"
-          >
+          <button onClick={() => setIsSettingsOpen(true)} className="w-14 h-14 bg-[var(--bg-input)] text-[var(--text-muted)] hover:text-[var(--accent)] rounded-2xl border-2 border-[var(--border-main)] hover:border-[var(--border-hover)] flex items-center justify-center shadow-sm hover:shadow-[0_10px_20px_var(--accent-glow)] active:scale-90 transition-all">
             <Settings2 className="w-6 h-6" />
           </button>
         </div>
@@ -414,7 +400,10 @@ export default function App() {
 
       <main className="flex-1 overflow-hidden relative bg-[var(--bg-app)]">
         <div className="h-full overflow-y-auto ideas-scroll transition-colors duration-500">
-          {activeTab === 'board' ? <Board projectId={projectId} posts={posts} refreshPosts={fetchData} projectContext={currentProjectContext} /> : <Tools library={library} projectId={projectId} />}
+          {/* 🔥 Прокидываем allPosts и refreshLibrary 🔥 */}
+          {activeTab === 'board' && <Board projectId={projectId} posts={posts} refreshPosts={fetchData} refreshLibrary={fetchLibrary} projectContext={currentProjectContext} />}
+          {activeTab === 'tools' && <Tools library={library} projectId={projectId} />}
+          {activeTab === 'templates' && <Templates library={library} projectId={projectId} refreshLibrary={fetchLibrary} refreshPosts={fetchData} />}
         </div>
       </main>
 
@@ -483,12 +472,6 @@ export default function App() {
         onOpenDataHub={() => setIsDataHubOpen(true)} 
       />
       
-      <LibraryModal 
-        isOpen={isLibraryOpen} onClose={() => setIsLibraryOpen(false)} 
-        library={library} onAdd={handleAddPrompt} onUpdate={handleUpdatePrompt} 
-        onDelete={handleDeletePrompt} projectId={projectId} refreshPosts={fetchData}
-      />
-
       <TutorialModal isOpen={runTutorial} onClose={handleCompleteTutorial} />
 
       <DataHubModal 
@@ -529,7 +512,6 @@ export default function App() {
         </div>
       )}
 
-      {/* 🔥 КРАСИВАЯ МОДАЛКА ВВОДА IP ДЛЯ СММЩИКОВ 🔥 */}
       {showIpEntry && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 backdrop-blur-xl p-4">
           <div className="bg-[var(--bg-card)] border-2 border-[var(--accent)] p-10 rounded-[40px] shadow-[0_0_50px_var(--accent-glow)] max-w-md w-full animate-in zoom-in-95 relative z-10">

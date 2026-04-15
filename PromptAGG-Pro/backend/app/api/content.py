@@ -5,7 +5,6 @@ from core.database import get_session
 # 👇 ДОБАВИЛ ИМПОРТ Project СЮДА
 from models.content_plan import ContentPlan, Idea, PromptTemplate, Project
 from core.ws_manager import manager
-# 👇 ИСПРАВИЛ НА БОЛЬШУЮ БУКВУ M
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/content-plan", tags=["Content Plan"])
@@ -22,7 +21,7 @@ async def create_post(post: ContentPlan, session: Session = Depends(get_session)
     session.add(post)
     session.commit()
     session.refresh(post)
-    await manager.broadcast("update_posts") # Оповещаем всех
+    await manager.broadcast("update_posts")
     return post
 
 @router.put("/{post_id}", response_model=ContentPlan)
@@ -38,7 +37,7 @@ async def update_post(post_id: int, update_post: ContentPlan, session: Session =
     session.add(post)
     session.commit()
     session.refresh(post)
-    await manager.broadcast("update_posts") # Оповещаем всех
+    await manager.broadcast("update_posts")
     return post
 
 @router.delete("/{post_id}")
@@ -47,7 +46,7 @@ async def delete_post(post_id: int, session: Session = Depends(get_session)):
     if post:
         session.delete(post)
         session.commit()
-        await manager.broadcast("update_posts") # Оповещаем всех
+        await manager.broadcast("update_posts")
     return {"message": "Пост удален"}
 
 # --- эндпоинты для багажа идей ---

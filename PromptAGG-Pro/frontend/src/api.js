@@ -1,34 +1,22 @@
 import axios from "axios";
 
-// Читаем параметры, которые передал Электрон при запуске
+// Оставили только визуальную часть: Электрон может передать IP, чтобы показать его в кнопке "Скопировать IP"
 const urlParams = new URLSearchParams(window.location.search);
-const isManager = urlParams.get('isManager') === 'true';
 const localIpFromElectron = urlParams.get('localIp');
 
-let hubIp;
-
-if (isManager) {
-    hubIp = '127.0.0.1';
-    localStorage.setItem('HUB_IP', hubIp);
-    if (localIpFromElectron) {
-        localStorage.setItem('MANAGER_DISPLAY_IP', localIpFromElectron);
-    }
-} else {
-    localStorage.removeItem('MANAGER_DISPLAY_IP');
-    hubIp = localStorage.getItem('HUB_IP');
-    
-    // УБРАЛИ ПРОКЛЯТЫЙ PROMPT. Если IP нет, просто оставляем пустым
-    if (!hubIp || hubIp === '127.0.0.1') {
-        hubIp = "";
-    }
+if (localIpFromElectron) {
+    localStorage.setItem('MANAGER_DISPLAY_IP', localIpFromElectron);
 }
 
-// Если IP пустой, ставим заглушку, чтобы Axios не выдал ошибку раньше времени
+// Тупо берем IP из памяти. Нет IP = будет окно ввода. Есть IP = работаем.
+let hubIp = localStorage.getItem('HUB_IP');
+
+// Заглушка для первичной инициализации Axios (чтобы не падал до ввода IP)
 const API_URL = `http://${hubIp || '127.0.0.1'}:8000`;
 
 const api = axios.create({ 
     baseURL: API_URL,
-    timeout: 5000 // 5 секунд на ожидание ответа
+    timeout: 5000 
 });
 
 export const HUB_IP = hubIp;

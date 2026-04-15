@@ -10,16 +10,27 @@ let serverProcess = null;
 const PORT = 3000;
 
 function startApp() {
-  const exeDir = path.dirname(app.getPath('exe'));
-  const serverExePath = path.join(exeDir, 'PromptAGG_Server.exe'); 
-  
-  const isManager = fs.existsSync(serverExePath);
+  let exeDir;
+  if (process.env.PORTABLE_EXECUTABLE_DIR) {
+    exeDir = process.env.PORTABLE_EXECUTABLE_DIR;
+  } else if (app.isPackaged) {
+    exeDir = path.dirname(app.getPath('exe'));
+  } else {
+    exeDir = app.getAppPath();
+  }
+
+  const batPath = path.join(exeDir, 'backend', 'app', 'start_server.bat'); 
+  const isManager = fs.existsSync(batPath);
 
   if (isManager) {
-    console.log("Найден сервер! Запуск в режиме РУКОВОДИТЕЛЯ...");
-    serverProcess = spawn(serverExePath, [], { cwd: exeDir });
+    console.log("НАЙДЕН БЭКЕНД В: " + batPath);
+    serverProcess = spawn('cmd.exe', ['/c', batPath], { 
+      cwd: path.join(exeDir, 'backend', 'app'),
+      windowsHide: true,
+      detached: false
+    });
   } else {
-    console.log("Сервер не найден. Запуск в режиме СММ-СПЕЦИАЛИСТА...");
+    console.log("БЭКЕНД НЕ НАЙДЕН. Искал тут: " + batPath);
   }
 
   const serverApp = express();
@@ -42,37 +53,46 @@ function startApp() {
     }
 
     mainWindow = new BrowserWindow({
-      width: 1400,
+      width: 1440,
       height: 900,
       minWidth: 1024,
       minHeight: 768,
-      titleBarStyle: 'hiddenInset',
       webPreferences: {
         nodeIntegration: true,
-        contextIsolation: false,
-        devTools: false // 👈 Отключили панель разработчика
+        contextIsolation: false
       }
     });
 
-    // 👈 Прячем стандартное меню Windows
     mainWindow.setMenu(null); 
+    mainWindow.webContents.openDevTools();
 
-    mainWindow.loadURL(`http://localhost:${PORT}?isManager=${isManager}&localIp=${localIp}`);
+    const startUrl = `http://localhost:${PORT}?isManager=${isManager}`;
+
+    // МАГИЯ СИНХРОНИЗАЦИИ: Ждем 2 секунды, чтобы Питон успел запуститься
+    if (isManager) {
+      setTimeout(() => {
+        mainWindow.loadURL(startUrl);
+      }, 2000);
+    } else {
+      mainWindow.loadURL(startUrl);
+    }
+
+    mainWindow.webContents.on('did-finish-load', () => {
+      mainWindow.webContents.executeJavaScript(`
+        localStorage.setItem('MANAGER_DISPLAY_IP', '${localIp}');
+        if (${isManager}) {
+            localStorage.setItem('HUB_IP', '127.0.0.1');
+        }
+      `);
+    });
   });
 }
 
-app.whenReady().then(() => {
-  startApp();
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) startApp();
-  });
-});
+app.whenReady().then(startApp);
 
 app.on('will-quit', () => {
   if (serverProcess) serverProcess.kill();
-  exec('taskkill /F /IM PromptAGG_Server.exe', (err) => {
-    console.log("Сервер принудительно остановлен.");
-  });
+  exec('taskkill /F /IM python.exe /T', () => {});
 });
 
 app.on('window-all-closed', () => {
