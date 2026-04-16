@@ -148,9 +148,21 @@ const PostCard = memo(function PostCard({ post, refreshPosts, refreshLibrary, on
     }
   }, [localPost.platforms?.[activePlatform]?.topic, localPost.topic, activePlatform]);
 
-  const saveToDB = async (updatedPost) => {
-    try { await api.updatePost(updatedPost.id, updatedPost); }
-    catch (e) { console.error("Ошибка сохранения в БД:", e); }
+  //  ТАЙМЕР ДЛЯ ЗАЩИТЫ ОТ DDoS
+  const saveTimeoutRef = useRef(null);
+
+  const saveToDB = (updatedPost) => {
+    // Если юзер продолжает быстро печатать - сбрасываем старый таймер
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    
+    // Ждем 600 миллисекунд тишины перед отправкой на сервер
+    saveTimeoutRef.current = setTimeout(async () => {
+      try { 
+        await api.updatePost(updatedPost.id, updatedPost); 
+      } catch (e) { 
+        console.error("Ошибка сохранения в БД:", e); 
+      }
+    }, 600);
   };
 
   const changeTab = (platId) => {
