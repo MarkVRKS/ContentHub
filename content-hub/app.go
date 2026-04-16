@@ -120,51 +120,44 @@ func (a *App) RunService(s Service) string {
     }
     a.mu.Unlock()
 
-    var cmd *exec.Cmd // инициализация переменной для будущей команды
+    s.COMMAND = strings.TrimSpace(s.COMMAND)
+    if s.COMMAND == "" {
+        return "Ошибка: пустая команда"
+    }
 
-    slices := strings.Fields(s.COMMAND) // превращаем строку в слайс строк, т.к. ОС не понимает пробелы - ей нужен список аргументов
-
-    // получение айпи ContentHub'a
+    var cmd *exec.Cmd
     hubIP := GetOutboundIP()
     ipArg := "--hub-ip=" + hubIP
 
     if runtime.GOOS == "windows" {
-        args := append([]string{"/C"}, slices...)
-        // почему "..."?
-        // "..." - это синтаксис для распаковки слайса
-        // в отдельные аргументы функции
-        // в данном случае, мы хотим передать каждый
-        // элемент слайса как отдельный аргумент команды,
-        // а не весь слайс целиком
-        args = append(args, ipArg) // вшиваю ip в команду запуска для windows
-        cmd = exec.Command("cmd", args...)
+        // Для Винды передаем команду в системный cmd
+        fullCmd := fmt.Sprintf("%s %s", s.COMMAND, ipArg)
+        cmd = exec.Command("cmd.exe", "/C", fullCmd)
     } else { 
-        // для macos, linux берем первый элемент как имя команды
-        // а остальные элементы как аргументы
-        args := append(slices[1:], ipArg)
-        cmd = exec.Command(slices[0], args...)
+        // 🔥 ФИКС ДЛЯ MAC: Оборачиваем команду в ZSH
+        // Флаг -l (login) заставляет Мак загрузить переменные среды (~/.zshrc)
+        // Благодаря этому Хаб найдет команду "go"
+        fullCmd := fmt.Sprintf("%s %s", s.COMMAND, ipArg)
+        cmd = exec.Command("/bin/zsh", "-l", "-c", fullCmd)
         
-        // ВАЖНО ДЛЯ MAC: Создаем отдельную группу процессов (Семью)
-        // Чтобы при убийстве родителя умирали и все дочерние зомби-процессы
+        // Создаем отдельную группу процессов (Семью)
         cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
     }
 
     cmd.Dir = s.PATH
 
-    // обработка ошибок при запуске команды
-    // переменая получает результат выполнения команда
-    // а после работает над фидбеком для пользователя
+    // Запускаем
     err := cmd.Start()
     if err != nil {
-        return fmt.Sprintf("Ошибка запуска сервиса %s:%s", s.NAME, err)
+        return fmt.Sprintf("Ошибка запуска сервиса %s: %v", s.NAME, err)
     }
 
-    // Сохраняем процесс в наш сейф (map)
+    // Сохраняем процесс в наш сейф
     a.mu.Lock()
     a.processes[s.ID] = cmd
     a.mu.Unlock()
 
-    // Фоновый слушатель: удалит процесс из памяти хаба, если скрипт завершится сам по себе
+    // Фоновый слушатель: удалит процесс из памяти хаба, если скрипт завершится
     go func() {
         cmd.Wait()
         a.mu.Lock()
@@ -174,6 +167,36 @@ func (a *App) RunService(s Service) string {
 
     return fmt.Sprintf("Сервис %s успешно запущен", s.NAME)
 }
+
+// // НОВЫЙ МЕТОД: Остановка сервиса (УБИЙСТВО ВСЕЙ ГРУППЫ ПРОЦЕССОВ)
+// func (a *App) StopService(id string) error {
+//     a.mu.Lock()
+//     defer a.mu.Unlock()
+
+//     cmd, exists := a.processes[id]
+//     if !exists {
+//         return fmt.Errorf("Сбой: Сервис не найден в активных")
+//     }
+
+//     if runtime.GOOS != "windows" {
+//         // ВАЖНО ДЛЯ MAC: Убиваем всю группу процессов (знак минус перед PID)
+//         // Это убьет и сам терминал, и Node.js, и Go-бота внутри него
+//         err := syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
+//         if err != nil {
+//             return fmt.Errorf("Не удалось ликвидировать процесс: %v", err)
+//         }
+//     } else {
+//         // Запасной вариант для Windows
+//         err := cmd.Process.Kill()
+//         if err != nil {
+//             return fmt.Errorf("Не удалось ликвидировать процесс: %v", err)
+//         }
+//     }
+
+//     // Вычищаем из сейфа
+//     delete(a.processes, id)
+//     return nil
+// }
 
 // НОВЫЙ МЕТОД: Остановка сервиса (УБИЙСТВО ВСЕЙ ГРУППЫ ПРОЦЕССОВ)
 func (a *App) StopService(id string) error {
@@ -187,16 +210,19 @@ func (a *App) StopService(id string) error {
 
     if runtime.GOOS != "windows" {
         // ВАЖНО ДЛЯ MAC: Убиваем всю группу процессов (знак минус перед PID)
-        // Это убьет и сам терминал, и Node.js, и Go-бота внутри него
         err := syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
         if err != nil {
-            return fmt.Errorf("Не удалось ликвидировать процесс: %v", err)
+            return fmt.Errorf("Не удалось ликвидировать процесс (Mac): %v", err)
         }
     } else {
-        // Запасной вариант для Windows
-        err := cmd.Process.Kill()
+        // 🔥 ВАЖНО ДЛЯ WINDOWS: Убиваем дерево процессов (Tree Kill)
+        // Иначе cmd.exe умрет, а go run . останется висеть в фоне как зомби
+        killCmd := exec.Command("taskkill", "/T", "/F", "/PID", fmt.Sprint(cmd.Process.Pid))
+        err := killCmd.Run()
         if err != nil {
-            return fmt.Errorf("Не удалось ликвидировать процесс: %v", err)
+            // Если taskkill не сработал, пробуем стандартный метод как запасной
+            cmd.Process.Kill()
+            return fmt.Errorf("Сбой древовидного убийства (Win), применен обычный: %v", err)
         }
     }
 
