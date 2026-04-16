@@ -10,6 +10,7 @@ let serverProcess = null;
 const PORT = 3000;
 
 function startApp() {
+  // 1. Определяем директорию, откуда запущен экзешник
   let exeDir;
   if (process.env.PORTABLE_EXECUTABLE_DIR) {
     exeDir = process.env.PORTABLE_EXECUTABLE_DIR;
@@ -19,20 +20,31 @@ function startApp() {
     exeDir = app.getAppPath();
   }
 
-  const batPath = path.join(exeDir, 'backend', 'app', 'start_server.bat'); 
-  const isManager = fs.existsSync(batPath);
+  // 2. Ищем напрямую питоновский файл в виртуальном окружении, БЕЗ БАТНИКОВ
+  const backendAppDir = path.join(exeDir, 'backend', 'app'); 
+  const pythonExe = path.join(backendAppDir, 'venv', 'Scripts', 'python.exe');
+  
+  // Проверяем, существует ли python.exe (значит мы на компе Руководителя)
+  const isManager = fs.existsSync(pythonExe);
 
   if (isManager) {
-    console.log("НАЙДЕН БЭКЕНД В: " + batPath);
-    serverProcess = spawn('cmd.exe', ['/c', batPath], { 
-      cwd: path.join(exeDir, 'backend', 'app'),
-      windowsHide: true,
+    console.log("НАЙДЕН БЭКЕНД. Запускаем скрыто через: " + pythonExe);
+    
+    // 3. Запускаем сервер напрямую через python.exe
+    serverProcess = spawn(pythonExe, ['-m', 'uvicorn', 'main:app', '--host', '0.0.0.0', '--port', '8000'], { 
+      cwd: backendAppDir,
+      windowsHide: true, // Прячет консоль от руководителя
       detached: false
     });
+
+    serverProcess.stderr.on('data', (data) => {
+      console.error(`Логи сервера: ${data}`);
+    });
   } else {
-    console.log("БЭКЕНД НЕ НАЙДЕН. Искал тут: " + batPath);
+    console.log("БЭКЕНД НЕ НАЙДЕН. Включаем режим SMM-сотрудника.");
   }
 
+  // 4. Поднимаем локальный Express для интерфейса
   const serverApp = express();
   const distPath = path.join(__dirname, 'dist');
   
@@ -42,6 +54,7 @@ function startApp() {
   });
 
   serverApp.listen(PORT, '127.0.0.1', () => {
+    // Получаем локальный IP для шаринга команде
     let localIp = '127.0.0.1';
     const interfaces = os.networkInterfaces();
     for (const name of Object.keys(interfaces)) {
@@ -64,24 +77,26 @@ function startApp() {
     });
 
     mainWindow.setMenu(null); 
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools(); // Раскомментируй, если нужен дебаг
 
-    const startUrl = `http://localhost:${PORT}?isManager=${isManager}`;
+    const startUrl = `http://localhost:${PORT}?isManager=${isManager}&localIp=${localIp}`;
 
-    // МАГИЯ СИНХРОНИЗАЦИИ: Ждем 2 секунды, чтобы Питон успел запуститься
+    // Ждем 2.5 секунды, чтобы база данных гарантированно поднялась
     if (isManager) {
       setTimeout(() => {
         mainWindow.loadURL(startUrl);
-      }, 2000);
+      }, 2500);
     } else {
       mainWindow.loadURL(startUrl);
     }
 
     mainWindow.webContents.on('did-finish-load', () => {
       mainWindow.webContents.executeJavaScript(`
-        localStorage.setItem('MANAGER_DISPLAY_IP', '${localIp}');
+        if ('${localIp}' !== '127.0.0.1') {
+           localStorage.setItem('MANAGER_DISPLAY_IP', '${localIp}');
+        }
         if (${isManager}) {
-            localStorage.setItem('HUB_IP', '127.0.0.1');
+           localStorage.setItem('HUB_IP', '127.0.0.1');
         }
       `);
     });
@@ -91,6 +106,7 @@ function startApp() {
 app.whenReady().then(startApp);
 
 app.on('will-quit', () => {
+  // 5. Жестко убиваем процессы питона при закрытии приложения
   if (serverProcess) serverProcess.kill();
   exec('taskkill /F /IM python.exe /T', () => {});
 });

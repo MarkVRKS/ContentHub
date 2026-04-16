@@ -39,10 +39,7 @@ func createEmojiPack(token string, userID int64, packName, packTitle, format str
 			ext = ".webm"
 		}
 
-		partWriter, err := writer.CreateFormFile(attachName, attachName+ext)
-		if err != nil {
-			return err
-		}
+		partWriter, _ := writer.CreateFormFile(attachName, attachName+ext)
 		_, _ = partWriter.Write(fileBytes)
 	}
 

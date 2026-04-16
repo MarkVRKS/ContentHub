@@ -16,6 +16,7 @@ import (
 
 const (
 	botToken = "8641053829:AAHnVqGVw_vk5MLqJWOFhjgfDK9KdTEDj-Y"
+	// ВАЖНО: Здесь должен быть точный юзернейм бота в Telegram (без @). Он обязан заканчиваться на "bot".
 	botName  = "slicer_mafia_bot" 
 )
 

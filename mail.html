@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цифровой щит | МОШЕЛОВКА.РФ</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
+        :root {
+            --bg-color: #0b0c10;
+            --panel-bg: rgba(31, 40, 51, 0.7);
+            --neon-blue: #45a29e;
+            --neon-green: #66fcf1;
+            --neon-red: #ff003c;
+            --text-main: #c5c6c7;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, #1f2833 0%, transparent 70%);
+        }
+
+        /* Top Banner */
+        .top-banner {
+            background: linear-gradient(90deg, #1f2833, #0b0c10);
+            color: var(--neon-green);
+            text-align: center;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(69, 162, 158, 0.4);
+            text-transform: uppercase;
+            z-index: 10;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            flex: 1;
+            padding: 30px;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Left Panel - Progress */
+        .progress-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: var(--panel-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(102, 252, 241, 0.2);
+            backdrop-filter: blur(10px);
+            min-width: 80px;
+        }
+
+        .circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1f2833;
+            border: 2px solid var(--neon-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 10px rgba(69, 162, 158, 0.2);
+        }
+
+        .circle.active {
+            transform: scale(1.2);
+            border-color: var(--white);
+            box-shadow: 0 0 15px var(--white);
+        }
+
+        .circle.correct {
+            background: var(--neon-green);
+            border-color: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        .circle.wrong {
+            background: var(--neon-red);
+            border-color: var(--neon-red);
+            color: #fff;
+            box-shadow: 0 0 20px var(--neon-red);
+        }
+
+        /* Right Panel - Quiz */
+        .quiz-panel {
+            flex: 1;
+            background: var(--panel-bg);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(102, 252, 241, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .question-title {
+            color: var(--neon-green);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            color: var(--white);
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: rgba(11, 12, 16, 0.8);
+            border: 1px solid var(--neon-blue);
+            color: var(--text-main);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover {
+            background: rgba(69, 162, 158, 0.1);
+            color: var(--white);
+            transform: translateX(10px);
+            border-color: var(--neon-green);
+            box-shadow: inset 5px 0 0 var(--neon-green);
+        }
+
+        /* Modal for Videos/Warnings */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(11, 12, 16, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #1f2833;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            text-align: center;
+            border: 2px solid var(--neon-red);
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.4);
+            transform: translateY(50px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-content.success {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 30px rgba(102, 252, 241, 0.4);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .modal-title.warning { color: var(--neon-red); }
+        .modal-title.success { color: var(--neon-green); }
+
+        .modal-text {
+            font-size: 1.2rem;
+            color: var(--white);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .next-btn {
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-green);
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .next-btn:hover {
+            background: var(--neon-blue);
+            color: #0b0c10;
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        /* Statistics Screen */
+        .stats-panel {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .stats-title {
+            font-size: 3rem;
+            color: var(--white);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .stats-score {
+            font-size: 6rem;
+            color: var(--neon-green);
+            font-weight: 900;
+            text-shadow: 0 0 30px rgba(102, 252, 241, 0.6);
+            margin-bottom: 20px;
+        }
+
+        .stats-rank {
+            font-size: 2rem;
+            color: var(--neon-blue);
+            margin-bottom: 40px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; padding: 15px; }
+            .progress-panel { flex-direction: row; justify-content: center; }
+            .quiz-panel { padding: 20px; }
+            .question-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-banner">
+        🛡️ МОШЕЛОВКА.РФ
+    </div>
+
+    <div class="container" id="game-container">
+        <div class="progress-panel" id="progress-panel">
+            <div class="circle active" id="circle-0">1</div>
+            <div class="circle" id="circle-1">2</div>
+            <div class="circle" id="circle-2">3</div>
+            <div class="circle" id="circle-3">4</div>
+            <div class="circle" id="circle-4">5</div>
+        </div>
+
+        <div class="quiz-panel" id="quiz-panel">
+            <div class="question-title" id="q-category">Тема</div>
+            <div class="question-text" id="q-text">Текст вопроса</div>
+            <div class="options" id="options-container">
+                </div>
+        </div>
+
+        <div class="quiz-panel stats-panel" id="stats-panel">
+            <div class="stats-title">Анализ завершен</div>
+            <div class="stats-score" id="final-score">0/5</div>
+            <div class="stats-rank" id="final-rank">Статус</div>
+            <button class="next-btn" onclick="location.reload()">Пройти заново</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="feedback-modal">
+        <div class="modal-content" id="modal-content">
+            <div class="modal-title" id="modal-title">Внимание</div>
+            <div class="modal-text" id="modal-text">Текст видеопредупреждения...</div>
+            <button class="next-btn" onclick="nextQuestion()">Продолжить</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                category: "Кейс 1. «Лёгкий заработок»",
+                text: "В чате предлагают работу: переводить деньги через свою карту и оставлять 20% себе. Нужно только прислать фото паспорта и доступ в банк-клиент. Твои действия?",
+                options: [
+                    { text: "Соглашаюсь, это отличный шанс заработать.", correct: false },
+                    { text: "Требую предоплату за паспорт.", correct: false },
+                    { text: "Отказываюсь и блокирую. Это дропперство.", correct: true }
+                ],
+                wrongVideo: "🎥 Привет, я дроппер Коля. Меня поймали и посадили на 4 года. Ты бы тоже попался. Дропперам светит срок до 10 лет, а жертвы звонят и плачут. Не ведись на «просто переводить».",
+                correctVideo: "🛡️ Отличная работа! Ты не стал дроппером — соучастником кражи. Твоя карта и свобода в безопасности."
+            },
+            {
+                category: "Кейс 2. «Звонок из банка»",
+                text: "Звонит «сотрудник службы безопасности Сбербанка»: на вас пытаются оформить кредит. Для отмены назовите код из СМС. Ваши действия?",
+                options: [
+                    { text: "Называю код, спасаю свои деньги.", correct: false },
+                    { text: "Кладу трубку и звоню в банк по номеру с карты.", correct: true },
+                    { text: "Говорю, что у меня нет денег, и вешаю трубку.", correct: false }
+                ],
+                wrongVideo: "🎥 Код из СМС — это ключ от вашего кошелька. Настоящий банк никогда его не спросит. Никогда.",
+                correctVideo: "🛡️ Правильно! Единственный верный шаг — сбросить звонок и перезвонить в банк самому."
+            },
+            {
+                category: "Кейс 3. «Дипфейк-друг»",
+                text: "В Telegram пришло видео от друга. Лицо и голос его, но он просит срочно занять 5000 руб. на операцию маме. Видео длится 10 секунд.",
+                options: [
+                    { text: "Перевожу, это же друг, я узнаю его лицо.", correct: false },
+                    { text: "Звоню ему по обычному телефону и спрашиваю про видео.", correct: true },
+                    { text: "Пишу в ответ: «Назови нашу общую тайну».", correct: false }
+                ],
+                wrongVideo: "🎥 *Лицо друга «тает» и превращается в робота* Дипфейк копирует лицо за 30 секунд из видео в соцсетях. Всегда проверяй живым звонком или личной встречей.",
+                correctVideo: "🛡️ Верно! Дипфейки не выдерживают проверку неожиданным живым звонком по телефону."
+            },
+            {
+                category: "Кейс 4. «Взлом Госуслуг»",
+                text: "Приходит СМС: «Ваш аккаунт на Госуслугах взломан. Перейдите по ссылке gosuslugi-reset.ru и введите паспортные данные». Что делаете?",
+                options: [
+                    { text: "Перехожу, боюсь взлома.", correct: false },
+                    { text: "Игнорирую и удаляю СМС.", correct: true },
+                    { text: "Перехожу, но ввожу левые данные.", correct: false }
+                ],
+                wrongVideo: "🎥 *На экране красная надпись «ФИШИНГ»* Эта ссылка украдет твой пароль. Настоящий адрес только gosuslugi.ru. Никогда не переходи по ссылкам из СМС!",
+                correctVideo: "🛡️ Блестяще! Фишинговые ссылки — главная ловушка. Удалить и забыть — лучшее решение."
+            },
+            {
+                category: "Кейс 5. «Работа с паспортом»",
+                text: "На Авито нашел вакансию курьера с бесплатным обучением. Нужно отсканировать паспорт и подписать договор онлайн. Что настораживает?",
+                options: [
+                    { text: "Ничего, все так делают.", correct: false },
+                    { text: "Требую приехать в офис и посмотреть договор лично.", correct: true },
+                    { text: "Паспорт не даю, но согласен работать без договора.", correct: false }
+                ],
+                wrongVideo: "🎥 *Сломанный сканер* Твой паспорт уйдет мошенникам. Они оформят на тебя микрозаймы и фирмы-однодневки. Потом ты будешь должен миллионы. Требуй бумажный договор и живую подпись.",
+                correctVideo: "🛡️ Идеально! Никогда не свети паспорт онлайн непонятным работодателям. Только личное присутствие и живая подпись."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const qCategory = document.getElementById('q-category');
+        const qText = document.getElementById('q-text');
+        const optionsContainer = document.getElementById('options-container');
+        const modalOverlay = document.getElementById('feedback-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalText = document.getElementById('modal-text');
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            qCategory.innerText = q.category;
+            qText.innerText = q.text;
+            optionsContainer.innerHTML = '';
+
+            // Update circles active state
+            document.querySelectorAll('.circle').forEach((c, idx) => {
+                c.classList.remove('active');
+                if (idx === currentQuestionIndex) {
+                    c.classList.add('active');
+                }
+            });
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => handleAnswer(opt.correct);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(isCorrect) {
+            const circle = document.getElementById(`circle-${currentQuestionIndex}`);
+            const q = questions[currentQuestionIndex];
+
+            if (isCorrect) {
+                score++;
+                circle.classList.add('correct');
+                showModal(true, "ДОСТУП РАЗРЕШЕН", q.correctVideo);
+            } else {
+                circle.classList.add('wrong');
+                showModal(false, "⚠️ УГРОЗА БЕЗОПАСНОСТИ", q.wrongVideo);
+            }
+        }
+
+        function showModal(isSuccess, title, text) {
+            modalTitle.innerText = title;
+            modalText.innerText = text;
+            
+            if (isSuccess) {
+                modalContent.classList.add('success');
+                modalTitle.className = 'modal-title success';
+            } else {
+                modalContent.classList.remove('success');
+                modalTitle.className = 'modal-title warning';
+            }
+
+            modalOverlay.classList.add('active');
+        }
+
+        function nextQuestion() {
+            modalOverlay.classList.remove('active');
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                setTimeout(loadQuestion, 300);
+            } else {
+                setTimeout(showStats, 300);
+            }
+        }
+
+        function showStats() {
+            document.getElementById('quiz-panel').style.display = 'none';
+            document.getElementById('progress-panel').style.display = 'none';
+            const statsPanel = document.getElementById('stats-panel');
+            statsPanel.style.display = 'flex';
+
+            document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
+            
+            const rankEl = document.getElementById('final-rank');
+            if (score === 5) {
+                rankEl.innerText = "🏆 Агент безопасности высшего уровня. Вас не взломать!";
+                rankEl.style.color = "var(--neon-green)";
+            } else if (score >= 3) {
+                rankEl.innerText = "🛡️ Кибер-стажер. Вы на верном пути, но будьте бдительнее!";
+                rankEl.style.color = "#ffaa00";
+            } else {
+                rankEl.innerText = "🚨 Легкая добыча. Вам срочно нужно изучить базу кибербезопасности!";
+                rankEl.style.color = "var(--neon-red)";
+            }
+        }
+
+        // Init game
+        loadQuestion();
+    </script>
+</body>
+</html>

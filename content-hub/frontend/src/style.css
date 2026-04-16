@@ -59,7 +59,7 @@ body::after {
 }
 
 /* ==========================================================================
-   [ TOP BAR ]
+   [ TOP BAR & NAVIGATION (PREMIUM UI) ]
    ========================================================================== */
 .top-bar {
     display: flex; justify-content: space-between; align-items: center;
@@ -74,13 +74,52 @@ body::after {
 .brand { font-family: var(--font-display); font-size: 2.5rem; font-weight: 700; color: #fff; letter-spacing: 4px; display: flex; align-items: center; gap: 15px; }
 .brand-icon { font-size: 1.8rem; color: var(--mafia-gold); text-shadow: 0 0 20px var(--mafia-gold); }
 .version { font-family: var(--font-mono); font-size: 0.65rem; color: var(--mafia-gold); border: 1px solid var(--mafia-gold-dim); padding: 4px 8px; margin-left: 10px; }
-.top-controls { display: flex; align-items: center; gap: 20px; }
-.sys-info-btn { background: transparent; border: none; color: #8a8d98; font-family: var(--font-mono); padding: 8px 16px; cursor: pointer; font-size: 0.85rem; transition: var(--transition-fast); letter-spacing: 1px; position: relative; }
-.sys-info-btn::after { content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 1px; background: var(--mafia-gold); transition: var(--transition-fast); transform: translateX(-50%); }
-.sys-info-btn:hover { color: var(--mafia-gold); }
-.sys-info-btn:hover::after { width: 100%; }
 
-.status-indicator { font-family: var(--font-mono); font-size: 0.85rem; color: var(--mafia-gold); display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.1); }
+.top-controls { display: flex; align-items: center; gap: 15px; }
+
+/* НОВЫЙ ДИЗАЙН КНОПОК МЕНЮ */
+.nav-btn {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    border-radius: 10px;
+    color: #8a8d98;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 18px 6px 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    letter-spacing: 1px;
+}
+.nav-btn:hover {
+    background: rgba(212, 175, 55, 0.05);
+    border-color: rgba(212, 175, 55, 0.3);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+}
+.nav-icon {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.05);
+}
+.nav-btn:hover .nav-icon {
+    border-color: var(--mafia-gold);
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3), inset 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.status-indicator { font-family: var(--font-mono); font-size: 0.85rem; color: var(--mafia-gold); display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 8px;}
 .pulse { width: 6px; height: 6px; background-color: var(--mafia-gold); border-radius: 50%; box-shadow: 0 0 10px var(--mafia-gold); animation: pulseGlow 3s infinite; }
 @keyframes pulseGlow { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
@@ -107,13 +146,14 @@ body::after {
 .card-content p { color: #8a8d98; font-size: 0.95rem; line-height: 1.7; margin: 0 0 2.5rem 0; flex-grow: 1; font-weight: 300; }
 
 /* ==========================================================================
-   [ BUTTONS ]
+   [ BUTTONS (ИНТЕГРАЦИИ) ]
    ========================================================================== */
 .card-actions { display: flex; flex-direction: column; gap: 12px; margin-top: auto; }
 
 .btn-start {
     background: var(--space-900); color: var(--mafia-gold); font-family: var(--font-mono); font-size: 0.9rem; font-weight: 400; letter-spacing: 3px;
     padding: 1rem 2rem; border: 1px solid var(--mafia-gold-dim); cursor: pointer; transition: var(--transition-smooth); width: 100%; position: relative;
+    border-radius: 6px;
 }
 .btn-start:hover { background: rgba(212, 175, 55, 0.05); border-color: var(--mafia-gold); box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset 0 0 15px rgba(212, 175, 55, 0.1); }
 
@@ -125,11 +165,11 @@ body::after {
 }
 @keyframes goldShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-.btn-goto { background: transparent; color: #555; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 2px; padding: 0.8rem; border: 1px dashed rgba(255,255,255,0.1); cursor: pointer; transition: var(--transition-fast); }
+.btn-goto { background: transparent; color: #555; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 2px; padding: 0.8rem; border: 1px dashed rgba(255,255,255,0.1); cursor: pointer; transition: var(--transition-fast); border-radius: 6px;}
 .btn-goto:hover { border-style: solid; border-color: var(--mafia-gold); color: var(--mafia-gold); background: rgba(212, 175, 55, 0.02); }
 
 /* ==========================================================================
-   [ ДОСЬЕ (OVERLAYS) ]
+   [ ДОСЬЕ И ОВЕРЛЕИ ]
    ========================================================================== */
 .about-overlay {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -143,8 +183,11 @@ body::after {
     background: var(--space-800); border: 1px solid rgba(212, 175, 55, 0.3); border-top: 2px solid var(--mafia-gold);
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), inset 0 0 50px rgba(0,0,0,0.8);
     width: 650px; max-width: 90%; padding: 3px; opacity: 0; transform: translateY(30px) scale(0.98);
+    border-radius: 4px;
 }
-.paper-content { background: var(--space-900); padding: 50px; position: relative; }
+.schedule-paper-wide { width: 900px; max-width: 95vw; }
+
+.paper-content { background: var(--space-900); padding: 50px; position: relative; max-height: 90vh; overflow-y: auto;}
 
 .close-btn { position: absolute; top: 25px; right: 25px; background: transparent; border: none; color: #555; font-family: var(--font-mono); cursor: pointer; transition: 0.2s; letter-spacing: 1px; }
 .close-btn:hover { color: var(--mafia-red); }
@@ -166,75 +209,396 @@ body::after {
 .ip-dot { color: #444; text-shadow: none; margin: 0 5px; }
 
 /* ==========================================================================
-   [ АЛЬЯНСЫ (ВНЕШНИЕ ПАРТНЕРЫ) ]
+   [ АЛЬЯНСЫ ]
    ========================================================================== */
 .partners-list { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
-.partner-card { display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(212, 175, 55, 0.1); padding: 18px 25px; border-radius: 2px; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+.partner-card { display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(212, 175, 55, 0.1); padding: 18px 25px; border-radius: 4px; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
 .partner-card:hover { background: rgba(212, 175, 55, 0.05); border-color: var(--mafia-gold); transform: translateX(10px); box-shadow: -5px 0 0 var(--mafia-gold); }
 .partner-info h4 { margin: 0 0 5px 0; color: #fff; font-family: var(--font-display); letter-spacing: 2px; font-size: 1.2rem; font-weight: 500; }
 .partner-info p { margin: 0; color: #666; font-family: var(--font-body); font-size: 0.85rem; font-weight: 300; }
 .partner-action { display: flex; align-items: center; gap: 15px; }
 .partner-status { font-family: var(--font-mono); font-size: 0.75rem; color: var(--mafia-gold); letter-spacing: 1px; }
-.partner-arrow { color: #555; font-family: var(--font-mono); font-size: 1.2rem; transition: color 0.3s ease; }
+.partner-arrow { color: #555; font-family: var(--font-mono); font-size: 0.8rem; transition: color 0.3s ease; }
 .partner-card:hover .partner-arrow { color: var(--mafia-gold); text-shadow: 0 0 10px var(--mafia-gold); }
 
 /* ==========================================================================
-   [ СЕЙФ И ПАРОЛИ (БАЗА ДАННЫХ) ]
+   [ СЕЙФ И ПАРОЛИ ]
    ========================================================================== */
-.vault-item { background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.05); padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+.vault-item { background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.05); border-radius:4px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
 .vault-info h4 { font-family: var(--font-mono); color: var(--mafia-gold); margin: 0 0 5px 0; letter-spacing: 1px; font-size: 1rem; }
 .vault-info p { font-family: var(--font-mono); color: #888; margin: 0; font-size: 0.85rem; }
-.vault-secret { display: flex; align-items: center; gap: 15px; background: #000; padding: 10px 15px; border: 1px solid #111; min-width: 200px; justify-content: space-between; }
+.vault-secret { display: flex; align-items: center; gap: 15px; background: #000; padding: 10px 15px; border: 1px solid #111; border-radius:4px; min-width: 200px; justify-content: space-between; }
 .secret-text { font-family: var(--font-mono); color: #444; font-size: 1rem; letter-spacing: 3px; }
 .secret-text.decrypted { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); letter-spacing: 1px; }
-.decrypt-btn { background: transparent; border: 1px dashed var(--mafia-gold-dim); color: var(--mafia-gold); cursor: pointer; padding: 5px 10px; font-family: var(--font-mono); font-size: 0.7rem; transition: 0.3s; }
+.decrypt-btn { background: transparent; border: 1px dashed var(--mafia-gold-dim); border-radius: 4px; color: var(--mafia-gold); cursor: pointer; padding: 5px 10px; font-family: var(--font-mono); font-size: 0.7rem; transition: 0.3s; }
 .decrypt-btn:hover { background: var(--mafia-gold-dim); border-color: var(--mafia-gold); color: #fff; }
 
-/* ==========================================================================
-   [ МОДАЛЬНОЕ ОКНО ПИН-КОДА ]
-   ========================================================================== */
 #pin-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-.pin-box { background: #050505; border: 1px solid var(--mafia-red); padding: 40px; text-align: center; box-shadow: 0 0 50px rgba(139,0,0,0.2); width: 400px; }
+.pin-box { background: #050505; border: 1px solid var(--mafia-red); padding: 40px; border-radius: 4px; text-align: center; box-shadow: 0 0 50px rgba(139,0,0,0.2); width: 400px; }
 .pin-box h3 { color: var(--mafia-red); font-family: var(--font-display); letter-spacing: 3px; margin-top: 0; }
-.pin-input { background: #000; border: 1px solid #333; color: #fff; font-family: var(--font-mono); font-size: 2rem; padding: 10px; width: 100%; text-align: center; letter-spacing: 10px; margin: 20px 0; outline: none; transition: border-color 0.3s; }
+.pin-input { background: #000; border: 1px solid #333; color: #fff; font-family: var(--font-mono); font-size: 2rem; border-radius: 4px; padding: 10px; width: 100%; text-align: center; letter-spacing: 10px; margin: 20px 0; outline: none; transition: border-color 0.3s; }
 .pin-input:focus { border-color: var(--mafia-gold); }
 .pin-input.error { border-color: var(--mafia-red); animation: shake 0.4s; }
 .pin-actions { display: flex; gap: 10px; justify-content: center; }
-.pin-btn { background: transparent; border: 1px solid #333; color: #888; padding: 10px 20px; font-family: var(--font-mono); cursor: pointer; transition: 0.2s; }
+.pin-btn { background: transparent; border: 1px solid #333; border-radius:4px; color: #888; padding: 10px 20px; font-family: var(--font-mono); cursor: pointer; transition: 0.2s; }
 .pin-btn.confirm { border-color: var(--mafia-gold); color: var(--mafia-gold); }
 .pin-btn.confirm:hover { background: var(--mafia-gold-dim); color: #fff; }
 .pin-btn:hover { background: #111; color: #fff; }
 
 @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
 
-/* ==========================================================================
-   [ СЕКРЕТНЫЙ СЕЙФ (FLOATING BUTTON) ]
-   ========================================================================== */
 .vault-fab {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: var(--space-800);
-    border: 1px solid var(--mafia-gold-dim);
-    color: var(--mafia-gold);
-    font-size: 1.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    z-index: 100;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(212, 175, 55, 0.1);
+    position: fixed; bottom: 40px; right: 40px; width: 64px; height: 64px; border-radius: 50%;
+    background: var(--space-800); border: 1px solid var(--mafia-gold-dim); color: var(--mafia-gold);
+    font-size: 1.5rem; display: flex; justify-content: center; align-items: center; cursor: pointer;
+    z-index: 100; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(212, 175, 55, 0.1);
     transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
+.vault-fab:hover { background: rgba(212, 175, 55, 0.05); border-color: var(--mafia-gold); color: #fff; text-shadow: 0 0 15px var(--mafia-gold); transform: translateY(-5px) scale(1.05); }
 
-.vault-fab:hover {
-    background: rgba(212, 175, 55, 0.05);
-    border-color: var(--mafia-gold);
+
+/* ==========================================================================
+   [ СИСТЕМА АЛЕРТОВ (КОЛОКОЛЬЧИК) ]
+   ========================================================================== */
+.alert-container { position: relative; }
+.alert-btn.blinking {
+    border-color: rgba(139, 0, 0, 0.5);
     color: #fff;
-    text-shadow: 0 0 15px var(--mafia-gold);
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(212, 175, 55, 0.2);
+}
+.alert-btn.blinking .alert-icon {
+    border-color: var(--mafia-red);
+    background: rgba(139, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(139, 0, 0, 0.4), inset 0 0 15px rgba(139, 0, 0, 0.3);
+    animation: urgentGlow 1s infinite;
+}
+@keyframes urgentGlow {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); text-shadow: 0 0 10px #fff; }
+}
+.alert-dropdown {
+    position: absolute; top: 100%; right: 0; margin-top: 15px; width: 320px;
+    background: var(--space-800); border: 1px solid var(--mafia-red); border-radius: 6px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.9); border-top: 3px solid var(--mafia-red);
+    z-index: 1500; display: none; flex-direction: column; overflow: hidden;
+}
+.alert-dropdown.active { display: flex; }
+.alert-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px; border-bottom: 1px solid rgba(139, 0, 0, 0.3); background: rgba(139, 0, 0, 0.1);
+}
+.alert-header h4 { margin: 0; color: #fff; font-family: var(--font-display); font-size: 0.9rem; letter-spacing: 1px; }
+.alert-header button { background: none; border: 1px solid var(--mafia-red); border-radius: 4px; color: var(--mafia-red); padding: 5px 10px; font-size: 0.7rem; font-family: var(--font-mono); cursor: pointer; transition: 0.3s; }
+.alert-header button:hover { background: var(--mafia-red); color: #fff; }
+.alert-list { max-height: 300px; overflow-y: auto; }
+.alert-item { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-family: var(--font-mono); font-size: 0.8rem; color: #ccc; line-height: 1.6; }
+.alert-item:last-child { border-bottom: none; }
+.alert-who { color: var(--mafia-gold); font-weight: bold; }
+.alert-day { color: #fff; }
+.alert-what { color: var(--mafia-red); display: block; margin-top: 5px; }
+
+
+/* ==========================================================================
+   [ РАСПИСАНИЕ ОПЕРАЦИЙ (ПРЕМИУМ UI) ]
+   ========================================================================== */
+.schedule-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 20px; margin-bottom: 30px;
+}
+.sh-titles h2 { border-bottom: none; padding-bottom: 0; margin-bottom: 5px; }
+
+.schedule-actions { display: flex; gap: 10px; }
+.btn-action { 
+    font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 2px; padding: 10px 18px;
+    cursor: pointer; border: 1px solid; border-radius: 6px; transition: var(--transition-fast);
+}
+.btn-action.edit { background: transparent; border-color: var(--mafia-gold-dim); color: var(--mafia-gold); }
+.btn-action.edit:hover { background: var(--mafia-gold-dim); border-color: var(--mafia-gold); color: #fff; }
+.btn-action.save { background: rgba(212, 175, 55, 0.1); border-color: var(--mafia-gold); color: var(--mafia-gold); font-weight: bold; }
+.btn-action.save:hover { background: var(--mafia-gold); color: #000; box-shadow: 0 0 15px var(--mafia-gold-glow); }
+.btn-action.cancel { background: transparent; border-color: #444; color: #888; }
+.btn-action.cancel:hover { border-color: var(--mafia-red); color: var(--mafia-red); }
+
+.schedule-accordion-list { display: flex; flex-direction: column; gap: 15px; }
+
+.accordion-item {
+    background: var(--space-800);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 8px;
+    border-left: 4px solid var(--mafia-gold);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+.accordion-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 25px; cursor: pointer; transition: background 0.3s;
+}
+.accordion-header:hover { background: rgba(212, 175, 55, 0.05); }
+.acc-title h3 { margin: 0 0 5px 0; font-family: var(--font-display); font-size: 1.5rem; color: #fff; letter-spacing: 1px; }
+.acc-role { font-family: var(--font-mono); font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 2px; }
+.acc-icon { color: var(--mafia-gold); transition: transform 0.3s; font-size: 1.2rem; }
+.accordion-item.active .acc-icon { transform: rotate(180deg); }
+
+.accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; background: rgba(0,0,0,0.5); }
+.accordion-content { padding: 10px 25px 25px 25px; display: flex; flex-direction: column; gap: 8px; }
+
+.premium-day-row {
+    display: grid; grid-template-columns: 140px 1fr 140px; align-items: center; gap: 20px;
+    padding: 12px 20px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 6px; transition: var(--transition-fast);
+}
+.premium-day-row.is-off { opacity: 0.4; background: transparent; border-color: rgba(139, 0, 0, 0.2); }
+.premium-day-row:hover { background: rgba(255,255,255,0.05); border-color: rgba(212, 175, 55, 0.2); }
+
+.day-name { font-family: var(--font-mono); color: var(--mafia-gold); font-size: 0.95rem; font-weight: 600; }
+
+.time-block { display: flex; align-items: center; gap: 15px; color: #555; justify-content: center;}
+
+/* ФИКС НЕВИДИМОГО ВРЕМЕНИ */
+.time-inp {
+    color-scheme: dark;
+    background: #111;
+    border: 1px solid #333;
+    color: #ffffff !important;
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    padding: 8px 12px;
+    border-radius: 6px;
+    width: 120px;
+    text-align: center;
+    transition: var(--transition-fast);
+}
+
+.scheduleContainer.editing .time-inp:not(:disabled) { 
+    border-color: var(--mafia-gold-dim); 
+    background: rgba(212, 175, 55, 0.05);
+}
+.time-inp:focus { 
+    outline: none; 
+    border-color: var(--mafia-gold); 
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); 
+}
+
+.time-sep { color: #666; font-weight: bold; }
+
+.status-pill {
+    padding: 10px 15px; font-family: var(--font-mono); font-size: 0.8rem; font-weight: bold;
+    border-radius: 6px; border: 1px solid; cursor: pointer; text-align: center; transition: 0.3s; pointer-events: none;
+}
+.scheduleContainer.editing .status-pill { pointer-events: all; }
+
+/* Статус РАБОЧИЙ */
+.status-pill.on { background: transparent; border-color: #444; color: #888; }
+.scheduleContainer.editing .status-pill.on:hover { border-color: var(--mafia-red); color: var(--mafia-red); }
+
+/* Статус ВЫХОДНОЙ */
+.status-pill.off { background: rgba(139, 0, 0, 0.15); border-color: var(--mafia-red); color: var(--mafia-red); box-shadow: inset 0 0 10px rgba(139,0,0,0.5); }
+.scheduleContainer.editing .status-pill.off:hover { background: transparent; border-color: #888; color: #888; box-shadow: none;}
+
+/* ==========================================================================
+   [ ГЛОБАЛЬНЫЙ АЛЕРТ (КОЛОКОЛЬЧИК СВЕРХУ) ]
+   ========================================================================== */
+.global-alert-container {
+    position: fixed;
+    top: 25px;
+    right: 40px;
+    z-index: 2000;
+}
+.global-alert-btn {
+    background: rgba(139, 0, 0, 0.1);
+    border: 1px solid var(--mafia-red);
+    border-radius: 8px;
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    padding: 10px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
+    transition: var(--transition-fast);
+}
+.global-alert-btn.blinking {
+    animation: alertGlow 1s infinite;
+}
+@keyframes alertGlow {
+    0%, 100% { box-shadow: 0 0 15px rgba(139, 0, 0, 0.3); transform: scale(1); }
+    50% { box-shadow: 0 0 25px rgba(139, 0, 0, 0.8), inset 0 0 10px rgba(139, 0, 0, 0.5); transform: scale(1.05); text-shadow: 0 0 8px #fff; }
+}
+
+/* ==========================================================================
+   [ МОДАЛКА УПРАВЛЕНИЯ АЛЬЯНСАМИ ]
+   ========================================================================== */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+    z-index: 3000; display: none; justify-content: center; align-items: center;
+    opacity: 0; transition: opacity 0.3s ease;
+}
+.modal-overlay.active { display: flex; opacity: 1; pointer-events: all; }
+.modal-box {
+    background: var(--space-800);
+    border: 1px solid rgba(212, 175, 55, 0.3); border-top: 2px solid var(--mafia-gold);
+    padding: 40px; width: 450px; border-radius: 6px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
+}
+.modal-box h3 { margin-top: 0; font-family: var(--font-display); color: var(--mafia-gold); letter-spacing: 2px; }
+.mafia-input {
+    width: 100%; background: #0a0a0a; border: 1px solid #333; color: #fff;
+    font-family: var(--font-mono); padding: 12px; margin-bottom: 15px; border-radius: 4px;
+    transition: 0.3s;
+}
+.mafia-input:focus { outline: none; border-color: var(--mafia-gold); box-shadow: 0 0 10px rgba(212,175,55,0.2); }
+.mafia-input.error { border-color: var(--mafia-red); }
+.modal-actions { display: flex; justify-content: space-between; gap: 10px; }
+
+/* Кнопка шестеренки у карточек партнеров */
+.partner-edit-btn {
+    background: transparent; border: none; color: #666; font-size: 1.2rem; cursor: pointer; transition: 0.2s;
+}
+.partner-edit-btn:hover { color: var(--mafia-gold); text-shadow: 0 0 10px var(--mafia-gold-glow); transform: rotate(90deg); }
+
+/* ==========================================================================
+   [ СЕЙФ СЕКРЕТОВ И ПАРОЛЕЙ (VAULT PREMIUM UI) ]
+   ========================================================================== */
+.vault-item { 
+    background: rgba(255,255,255,0.01); 
+    border: 1px solid rgba(255,255,255,0.05); 
+    border-radius: 8px; 
+    padding: 25px; 
+    margin-bottom: 20px; 
+    transition: var(--transition-fast);
+}
+.vault-item:hover {
+    background: rgba(212, 175, 55, 0.03);
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+.vault-info h4 { font-family: var(--font-display); color: #fff; margin: 0 0 10px 0; letter-spacing: 1px; font-size: 1.2rem; }
+
+.vault-tags-container {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
+}
+.vault-tag {
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid var(--mafia-gold-dim);
+    color: var(--mafia-gold);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
+.vault-credentials {
+    background: #000;
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.cred-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.cred-label {
+    font-family: var(--font-mono); color: #666; font-size: 0.8rem; width: 60px;
+}
+.cred-value {
+    font-family: var(--font-mono); color: #fff; font-size: 1rem; flex: 1; letter-spacing: 1px;
+}
+.vault-secret {
+    display: flex; align-items: center; gap: 15px; flex: 1;
+}
+
+.copy-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #aaa;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    transition: 0.2s;
+    display: flex; align-items: center; gap: 5px;
+}
+.copy-btn:hover { background: rgba(212, 175, 55, 0.1); color: var(--mafia-gold); border-color: var(--mafia-gold-dim); }
+.copy-btn.copied { background: var(--mafia-gold); color: #000; border-color: var(--mafia-gold); box-shadow: 0 0 10px var(--mafia-gold-glow); font-weight: bold; }
+
+/* 2FA Секция */
+.vault-2fa-row {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.fa-badge {
+    background: rgba(139, 0, 0, 0.15);
+    border: 1px solid var(--mafia-red);
+    color: var(--mafia-red);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
+/* Формы (Чекбокс 2FA) */
+.checkbox-container {
+    display: block; position: relative; padding-left: 35px; margin-top: 20px;
+    cursor: pointer; font-family: var(--font-body); font-size: 0.9rem; color: #aaa;
+    user-select: none;
+}
+.checkbox-container input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+.checkmark { position: absolute; top: -2px; left: 0; height: 22px; width: 22px; background-color: #111; border: 1px solid #444; border-radius: 4px; transition: 0.2s; }
+.checkbox-container:hover input ~ .checkmark { border-color: var(--mafia-gold); }
+.checkbox-container input:checked ~ .checkmark { background-color: var(--mafia-gold); border-color: var(--mafia-gold); }
+.checkmark:after { content: ""; position: absolute; display: none; }
+.checkbox-container input:checked ~ .checkmark:after { display: block; }
+.checkbox-container .checkmark:after { left: 7px; top: 3px; width: 5px; height: 10px; border: solid #000; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+
+/* ==========================================================================
+   [ ФИЛЬТРЫ СЕЙФА (ТЕГИ) ]
+   ========================================================================== */
+.vault-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.filter-btn {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #888;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    letter-spacing: 1px;
+}
+
+.filter-btn:hover {
+    background: rgba(212, 175, 55, 0.05);
+    border-color: rgba(212, 175, 55, 0.3);
+    color: #fff;
+}
+
+.filter-btn.active {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: var(--mafia-gold);
+    color: var(--mafia-gold);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    font-weight: bold;
 }
